@@ -1,4 +1,4 @@
-package ass2.spec;
+package ass2.engine.model;
 
 import java.awt.*;
 import java.util.ArrayList;

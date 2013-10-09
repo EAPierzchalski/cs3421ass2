@@ -1,5 +1,8 @@
-package ass2.spec;
+package ass2;
 
+import ass2.engine.model.Road;
+import ass2.engine.model.Terrain;
+import ass2.engine.model.Tree;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

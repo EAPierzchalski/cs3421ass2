@@ -1,7 +1,13 @@
-package ass2.spec;
+package ass2;
 
+import ass2.engine.model.Terrain;
 import org.json.JSONException;
 
+import javax.media.opengl.GLCapabilities;
+import javax.media.opengl.GLProfile;
+import javax.media.opengl.awt.GLJPanel;
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 
@@ -23,7 +29,16 @@ public class Game {
      *
      */
     public void run() {
-        
+        GLProfile glProfile = GLProfile.getDefault();
+        GLCapabilities glCapabilities = new GLCapabilities(glProfile);
+
+        GLJPanel gamePanel = new GLJPanel(glCapabilities);
+        JFrame gameFrame = new JFrame("3D Game");
+
+        gameFrame.getContentPane().add(gamePanel, BorderLayout.CENTER);
+        gameFrame.setSize(1024, 768);
+        gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        gameFrame.setVisible(true);
     }
     
     /**
