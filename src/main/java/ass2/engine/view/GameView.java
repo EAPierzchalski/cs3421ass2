@@ -1,6 +1,6 @@
 package ass2.engine.view;
 
-import ass2.engine.model.Terrain;
+import ass2.engine.model.GameModel;
 
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
@@ -13,11 +13,11 @@ import javax.media.opengl.GLEventListener;
  */
 public class GameView implements GLEventListener {
 
-    private Terrain terrain;
-    private Camera camera;
+    private GameModel gameModel;
+    private Camera camera = new Camera();
 
-    public GameView(Terrain terrain) {
-        this.terrain = terrain;
+    public GameView(GameModel gameModel) {
+        this.gameModel = gameModel;
     }
 
     @Override

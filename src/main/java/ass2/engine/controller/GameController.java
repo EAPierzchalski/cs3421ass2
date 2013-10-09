@@ -1,6 +1,8 @@
 package ass2.engine.controller;
 
-import ass2.engine.model.Terrain;
+import ass2.engine.model.GameModel;
+
+import javax.swing.*;
 
 /**
  * User: Pierzchalski
@@ -9,9 +11,14 @@ import ass2.engine.model.Terrain;
  * Project: cs3421ass2
  */
 public class GameController {
-    private Terrain terrain;
+    private GameModel gameModel;
 
-    public GameController(Terrain terrain) {
-        this.terrain = terrain;
+    public GameController(GameModel gameModel) {
+        this.gameModel = gameModel;
+    }
+
+    public void bindToPanel(JComponent jComponent) {
+        jComponent.addMouseListener(Mouse.theMouse);
+        jComponent.addMouseMotionListener(Mouse.theMouse);
     }
 }
