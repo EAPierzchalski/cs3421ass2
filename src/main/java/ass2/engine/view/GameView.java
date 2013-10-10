@@ -1,10 +1,13 @@
 package ass2.engine.view;
 
 import ass2.engine.model.GameModel;
+import com.jogamp.opengl.util.gl2.GLUT;
 
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
+import javax.media.opengl.glu.GLU;
+import java.util.Arrays;
 
 /**
  * User: Pierzchalski
@@ -19,7 +22,9 @@ public class GameView implements GLEventListener {
 
     public GameView(GameModel gameModel) {
         this.gameModel = gameModel;
-        this.camera = new Camera(gameModel.getPlayer2DPosition(), gameModel.getPlayerLookDirection());
+        this.camera = new Camera(gameModel.getPlayer3DPosition(), gameModel.getPlayerLookDirection());
+        System.out.println(Arrays.toString(camera.getPosition()));
+        System.out.println(Arrays.toString(camera.getLookingAt()));
     }
 
     @Override
@@ -42,13 +47,7 @@ public class GameView implements GLEventListener {
     }
 
     private void updateCamera() {
-        double[] playerPosition = gameModel.getPlayer2DPosition();
-        double[] newCameraPosition = new double[]{
-                playerPosition[0],
-                gameModel.getTerrain().altitude(playerPosition[0], playerPosition[1]),
-                playerPosition[1]
-        };
-        camera.setPosition(newCameraPosition);
+        camera.setPosition(gameModel.getPlayer3DPosition());
         camera.setLookDirection(gameModel.getPlayerLookDirection());
     }
 
@@ -59,13 +58,16 @@ public class GameView implements GLEventListener {
         camera.reshape(gl, x, y, width, height);
     }
 
-    private static final double[][] TEST_POLYGON = new double[][]{
-
-    }
+    private static final double[] TEST_COLOR = new double[]{0, 0, 0, 1};
 
     private void draw(GL2 gl) {
-        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL); {
-
-        }
+        gl.glColor4dv(TEST_COLOR, 0);
+        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
+        gl.glPushMatrix(); {
+            gl.glTranslated(2, 1, 0);
+            gl.glRotated(30, 1, 1, 0);
+            GLUT glut = new GLUT();
+            glut.glutSolidCube(1);
+        } gl.glPopMatrix();
     }
 }

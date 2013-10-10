@@ -20,17 +20,6 @@ public class Util {
         return dest;
     }
 
-    public static String doubleArray2String(double[] da) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("[ ");
-        for (double d : da) {
-            stringBuilder.append(d);
-            stringBuilder.append(" ");
-        }
-        stringBuilder.append("]");
-        return stringBuilder.toString();
-    }
-
     public static double[] add(double[] v1, double[] v2) {
         double[] sum = new double[v1.length];
         for (int i = 0; i < v1.length; i++) {

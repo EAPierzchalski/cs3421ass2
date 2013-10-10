@@ -26,7 +26,6 @@ public class GameEngine {
 
     public void linkTo(GLJPanel gljPanel) {
         gljPanel.addGLEventListener(gameView);
-
     }
 
     public void init() {

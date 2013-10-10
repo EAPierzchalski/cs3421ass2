@@ -29,6 +29,14 @@ public class GameModel {
         this.player2DPosition = player2DPosition;
     }
 
+    public double[] getPlayer3DPosition() {
+        return new double[] {
+                player2DPosition[0],
+                HEIGHT_ABOVE_TERRAIN + terrain.altitude(player2DPosition[0], player2DPosition[1]),
+                player2DPosition[1]
+        };
+    }
+
     public double[] getPlayerLookDirection() {
         return Util.copyArray(playerLookDirection);
     }
