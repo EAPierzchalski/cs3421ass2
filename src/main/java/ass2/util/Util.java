@@ -27,4 +27,17 @@ public class Util {
         }
         return sum;
     }
+
+    public static double[] normalize(double[] v) {
+        double length = 0;
+        for (double x : v) {
+            length += Math.pow(x, 2);
+        }
+        length = Math.pow(length, 0.5);
+        double[] normalizedV = new double[v.length];
+        for (int i = 0; i < normalizedV.length; i++) {
+            normalizedV[i] = v[i]/length;
+        }
+        return normalizedV;
+    }
 }

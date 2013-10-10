@@ -8,8 +8,6 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
-import javax.media.opengl.glu.GLU;
-import java.util.Arrays;
 
 /**
  * User: Pierzchalski
@@ -51,6 +49,7 @@ public class GameView implements GLEventListener {
         GL2 gl = glAutoDrawable.getGL().getGL2();
         updateCamera();
         camera.setView(gl);
+        Mouse.theMouse.update(gl);
         draw(gl);
     }
 
@@ -64,7 +63,6 @@ public class GameView implements GLEventListener {
         //To change body of implemented methods use File | Settings | File Templates.
         GL2 gl = glAutoDrawable.getGL().getGL2();
         camera.reshape(gl, x, y, width, height);
-        //This Mouse magic is from Malcolm
         Mouse.theMouse.reshape(gl);
     }
 

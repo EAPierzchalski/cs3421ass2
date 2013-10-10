@@ -12,6 +12,7 @@ import ass2.util.Util;
 public class GameModel {
 
     public static final double HEIGHT_ABOVE_TERRAIN = 1;
+    private static final double ROTATION_SPEED = 90;
 
     private Terrain terrain;
     private double[] player2DPosition = new double[]{0, 0};
@@ -29,6 +30,15 @@ public class GameModel {
         this.player2DPosition = player2DPosition;
     }
 
+    public void translatePlayer2DPosition(double x, double z) {
+        this.player2DPosition[0] += x;
+        this.player2DPosition[1] += z;
+    }
+
+    public void moveForward(double dt) {
+        translatePlayer2DPosition(playerLookDirection[0] * dt, playerLookDirection[2] * dt);
+    }
+
     public double[] getPlayer3DPosition() {
         return new double[] {
                 player2DPosition[0],
@@ -42,7 +52,18 @@ public class GameModel {
     }
 
     public void setPlayerLookDirection(double[] playerLookDirection) {
-        this.playerLookDirection = playerLookDirection;
+        this.playerLookDirection = Util.normalize(playerLookDirection);
+    }
+
+    public void rotatePlayerLookDirection(double dt) {
+        double radians = Math.toRadians(dt * ROTATION_SPEED);
+        double s = Math.sin(radians);
+        double c = Math.cos(radians);
+        playerLookDirection = new double[]{
+                playerLookDirection[0] * c - playerLookDirection[2] * s,
+                playerLookDirection[1],
+                playerLookDirection[0] * s + playerLookDirection[2] * c
+        };
     }
 
     public Terrain getTerrain() {

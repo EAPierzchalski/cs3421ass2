@@ -33,14 +33,15 @@ public class Game {
     public void run() {
         GLProfile glProfile = GLProfile.getDefault();
         GLCapabilities glCapabilities = new GLCapabilities(glProfile);
-
+        glCapabilities.setSampleBuffers(true);
+        glCapabilities.setNumSamples(4);
 
         GLJPanel gamePanel = new GLJPanel(glCapabilities);
         JFrame gameFrame = new JFrame("3D Game");
 
-        GameEngine gameEngine = new GameEngine(myTerrain);
+        GameEngine gameEngine = new GameEngine(myTerrain, gamePanel);
 
-        gameEngine.bindTo(gamePanel);
+        gameEngine.start();
 
         gameFrame.getContentPane().add(gamePanel, BorderLayout.CENTER);
         gameFrame.setSize(1024, 768);

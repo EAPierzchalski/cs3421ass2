@@ -4,6 +4,7 @@ import ass2.engine.controller.GameController;
 import ass2.engine.model.GameModel;
 import ass2.engine.model.Terrain;
 import ass2.engine.view.GameView;
+import com.jogamp.opengl.util.FPSAnimator;
 
 import javax.media.opengl.awt.GLJPanel;
 
@@ -17,19 +18,21 @@ public class GameEngine {
     private GameController gameController;
     private GameModel gameModel;
     private GameView gameView;
+    private FPSAnimator fpsAnimator;
 
-    public GameEngine(Terrain terrain) {
+    private static final int FRAMES_PER_SECOND = 60;
+
+    public GameEngine(Terrain terrain, GLJPanel gljPanel) {
         this.gameModel = new GameModel(terrain);
         this.gameView = new GameView(gameModel);
         this.gameController = new GameController(gameModel);
-    }
-
-    public void bindTo(GLJPanel gljPanel) {
+        this.fpsAnimator = new FPSAnimator(gljPanel, FRAMES_PER_SECOND);
         gljPanel.addGLEventListener(gameView);
         gameController.bindToPanel(gljPanel);
     }
 
-    public void init() {
-
+    public void start() {
+        this.gameController.start();
+        this.fpsAnimator.start();
     }
 }
