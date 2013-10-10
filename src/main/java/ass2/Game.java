@@ -3,7 +3,6 @@ package ass2;
 import ass2.engine.GameEngine;
 import ass2.engine.model.Terrain;
 import ass2.util.LevelIO;
-import ass2.util.Util;
 import org.json.JSONException;
 
 import javax.media.opengl.GLCapabilities;
@@ -35,12 +34,13 @@ public class Game {
         GLProfile glProfile = GLProfile.getDefault();
         GLCapabilities glCapabilities = new GLCapabilities(glProfile);
 
+
         GLJPanel gamePanel = new GLJPanel(glCapabilities);
         JFrame gameFrame = new JFrame("3D Game");
 
         GameEngine gameEngine = new GameEngine(myTerrain);
 
-        gameEngine.linkTo(gamePanel);
+        gameEngine.bindTo(gamePanel);
 
         gameFrame.getContentPane().add(gamePanel, BorderLayout.CENTER);
         gameFrame.setSize(1024, 768);

@@ -24,8 +24,9 @@ public class GameEngine {
         this.gameController = new GameController(gameModel);
     }
 
-    public void linkTo(GLJPanel gljPanel) {
+    public void bindTo(GLJPanel gljPanel) {
         gljPanel.addGLEventListener(gameView);
+        gameController.bindToPanel(gljPanel);
     }
 
     public void init() {

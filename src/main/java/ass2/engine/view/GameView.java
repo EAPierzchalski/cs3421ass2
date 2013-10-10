@@ -1,8 +1,10 @@
 package ass2.engine.view;
 
+import ass2.engine.controller.Mouse;
 import ass2.engine.model.GameModel;
 import com.jogamp.opengl.util.gl2.GLUT;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
@@ -23,13 +25,19 @@ public class GameView implements GLEventListener {
     public GameView(GameModel gameModel) {
         this.gameModel = gameModel;
         this.camera = new Camera(gameModel.getPlayer3DPosition(), gameModel.getPlayerLookDirection());
-        System.out.println(Arrays.toString(camera.getPosition()));
-        System.out.println(Arrays.toString(camera.getLookingAt()));
     }
 
     @Override
     public void init(GLAutoDrawable glAutoDrawable) {
         //To change body of implemented methods use File | Settings | File Templates.
+        GL2 gl = glAutoDrawable.getGL().getGL2();
+
+        gl.glEnable(GL.GL_DEPTH_TEST);
+
+        gl.glEnable(GL2.GL_LIGHTING);
+        gl.glEnable(GL2.GL_LIGHT0);
+
+        gl.glEnable(GL2.GL_NORMALIZE);
     }
 
     @Override
@@ -56,6 +64,8 @@ public class GameView implements GLEventListener {
         //To change body of implemented methods use File | Settings | File Templates.
         GL2 gl = glAutoDrawable.getGL().getGL2();
         camera.reshape(gl, x, y, width, height);
+        //This Mouse magic is from Malcolm
+        Mouse.theMouse.reshape(gl);
     }
 
     private static final double[] TEST_COLOR = new double[]{0, 0, 0, 1};
