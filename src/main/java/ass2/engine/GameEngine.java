@@ -5,6 +5,8 @@ import ass2.engine.model.GameModel;
 import ass2.engine.model.Terrain;
 import ass2.engine.view.GameView;
 
+import javax.media.opengl.awt.GLJPanel;
+
 /**
  * User: Pierzchalski
  * Date: 08/10/13
@@ -20,5 +22,14 @@ public class GameEngine {
         this.gameModel = new GameModel(terrain);
         this.gameView = new GameView(gameModel);
         this.gameController = new GameController(gameModel);
+    }
+
+    public void linkTo(GLJPanel gljPanel) {
+        gljPanel.addGLEventListener(gameView);
+
+    }
+
+    public void init() {
+
     }
 }

@@ -1,75 +1,89 @@
 package ass2.engine.view;
 
-import ass2.engine.model.GameObject;
+import ass2.util.Util;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 /**
- * The camera is a GameObject that can be moved, rotated and scaled like any other.
- * 
- * TODO: You need to implment the setView() and reshape() methods.
- *       The methods you need to complete are at the bottom of the class
- *
- * @author malcolmr
+ * Created with IntelliJ IDEA.
+ * User: Edward
+ * Date: 10/10/13
+ * Time: 3:53 PM
+ * To change this template use File | Settings | File Templates.
  */
-public class Camera extends GameObject {
+public class Camera {
+    private float[] backgroundColor = new float[]{1, 0, 0, 0};
+    private double[] position;
+    private double[] lookDirection;
+    private double[] lookingAt;
+    private double[] up;
 
-    private float[] myBackground;
+    private static final double VERTICAL_TOLERANCE = 1E-3;
 
-    public Camera(GameObject parent) {
-        super(parent);
-
-        myBackground = new float[4];
+    /***
+     *
+     * @param position a length 3 array storing the position of the camera
+     * @param lookDirection a length 3 array storing the direction the camera is looking at
+     */
+    public Camera(double[] position, double[] lookDirection) {
+        this.position = position;
+        this.lookDirection = lookDirection;
+        this.lookingAt = Util.add(position, lookDirection);
+        this.up = new double[]{0, 1, 0};
+        updateUp();
     }
 
-    public Camera() {
-        this(GameObject.ROOT);
-    }
-    
-    public float[] getBackground() {
-        return myBackground;
+    public double[] getPosition() {
+        return Util.copyArray(position);
     }
 
-    public void setBackground(float[] background) {
-        myBackground = background;
+    public double[] getLookDirection() {
+        return Util.copyArray(lookDirection);
     }
 
-    // ===========================================
-    // COMPLETE THE METHODS BELOW
-    // ===========================================
-   
-    
+    public double[] getLookingAt() {
+        return Util.copyArray(lookingAt);
+    }
+
+    private void updateUp() {
+        if (Math.abs(lookDirection[0]) +
+                Math.abs(lookDirection[2]) < VERTICAL_TOLERANCE) {
+            up[0] = lookDirection[0];
+            up[1] = 0;
+            up[2] = lookDirection[2];
+        } else {
+            up[0] = 0;
+            up[1] = 1;
+            up[2] = 0;
+        }
+    }
+
+    public void setPosition(double[] position) {
+        this.position = position;
+        this.lookingAt = Util.add(position, lookDirection);
+        updateUp();
+    }
+
+    public void setLookDirection(double[] lookDirection) {
+        this.lookDirection = lookDirection;
+        this.lookingAt = Util.add(position, lookDirection);
+        updateUp();
+    }
+
     public void setView(GL2 gl) {
-        // TODO 1. clear the view to the background colour
-        //gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
-        gl.glClearColor(myBackground[0], myBackground[1], myBackground[2], myBackground[3]);
+        gl.glClearColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], backgroundColor[3]);
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
-        
-        // TODO 2. set the view matrix to account for the camera's position
-        GLU glu = new GLU();
+
         gl.glMatrixMode(GL2.GL_MODELVIEW); {
+            GLU glu = new GLU();
             gl.glLoadIdentity();
-            glu.gluLookAt(
-                    pos
-            );
+            gluLookAt(glu, position, lookingAt, up);
         }
     }
 
-    public void reshape(GL2 gl, int x, int y, int width, int height) {
-        // TODO  1. match the projection aspect ratio to the viewport
-        // to avoid stretching
-        //System.out.println(String.format("%d, %d", width, height));
-        double aspectRatio = ((double) width) / height;
-        GLU glu = new GLU();
-        gl.glMatrixMode(GL2.GL_PROJECTION); {
-            gl.glLoadIdentity();
-            glu.gluOrtho2D(-aspectRatio, aspectRatio, -1, 1);
-        }
-    }
-
-    private static void lookAt(GLU glu, double[] eye, double[] centre, double[] up) {
+    private static void gluLookAt(GLU glu, double[] eye, double[] centre, double[] up) {
         glu.gluLookAt(
                 eye[0], eye[1], eye[2],
                 centre[0], centre[1], centre[2],
@@ -77,7 +91,13 @@ public class Camera extends GameObject {
         );
     }
 
-    private static void lookAt(GLU glu, double[] eye, double[] centre) {
-        lookAt(glu, eye, centre, new double[]{0, 1, 0});
+    public void reshape(GL2 gl, int x, int y, int width, int height) {
+        double aspectRatio = ((double) width) / height;
+        GLU glu = new GLU();
+        gl.glMatrixMode(GL2.GL_PROJECTION); {
+            gl.glLoadIdentity();
+            glu.gluPerspective(90, aspectRatio, 0.2, 10);
+        }
     }
+
 }

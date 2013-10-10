@@ -40,6 +40,7 @@ public class Game {
 
         GameEngine gameEngine = new GameEngine(myTerrain);
 
+        gameEngine.linkTo(gamePanel);
 
         gameFrame.getContentPane().add(gamePanel, BorderLayout.CENTER);
         gameFrame.setSize(1024, 768);
