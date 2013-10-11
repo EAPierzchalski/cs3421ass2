@@ -22,7 +22,7 @@ public class GameView implements GLEventListener {
 
     private static final double[] BACKGROUND_COLOR = new double[]{0, 0, 0, 1};
     private static final float[] SUNLIGHT_DIFFUSE_COLOR = new float[]{1f, 1f, 1f, 1f};
-    private static final float[] SUNLIGHT_AMBIENT_COLOR = new float[]{0.3f, 0.3f, 0.3f, 1f};
+    private static final float[] SUNLIGHT_AMBIENT_COLOR = new float[]{0.2f, 0.2f, 0.2f, 1f};
 
     public GameView(GameModel gameModel) {
         this.gameModel = gameModel;
@@ -73,11 +73,19 @@ public class GameView implements GLEventListener {
         gl.glColor4dv(BACKGROUND_COLOR, 0);
         gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
         gl.glPushMatrix(); {
-            gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, gameModel.getTerrain().getSunlight(), 0);
+            gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, getSunlightPosition(), 0);
             gl.glTranslated(2, 1, 0);
             gl.glRotated(60, 0, 1, 1);
             GLUT glut = new GLUT();
             glut.glutSolidCube(1f);
         } gl.glPopMatrix();
+    }
+
+    private float[] getSunlightPosition() {
+        float[] sunlight = gameModel.getTerrain().getSunlight();
+        for (int i = 0; i < sunlight.length; i++) {
+            sunlight[i] *= -1;
+        }
+        return sunlight;
     }
 }

@@ -11,8 +11,9 @@ import ass2.util.Util;
  */
 public class GameModel {
 
-    public static final double HEIGHT_ABOVE_TERRAIN = 1;
+    private static final double HEIGHT_ABOVE_TERRAIN = 1;
     private static final double ROTATION_SPEED = 90;
+    private static final double MOVEMENT_SPEED = 2;
 
     private Terrain terrain;
     private double[] player2DPosition = new double[]{0, 0};
@@ -36,7 +37,8 @@ public class GameModel {
     }
 
     public void moveForward(double dt) {
-        translatePlayer2DPosition(playerLookDirection[0] * dt, playerLookDirection[2] * dt);
+        double dDistance = dt * MOVEMENT_SPEED;
+        translatePlayer2DPosition(playerLookDirection[0] * dDistance, playerLookDirection[2] * dDistance);
     }
 
     public double[] getPlayer3DPosition() {
