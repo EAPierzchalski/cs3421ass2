@@ -35,7 +35,6 @@ public class LevelIO {
 
         int width = jsonTerrain.getInt("width");
         int depth = jsonTerrain.getInt("depth");
-        //Terrain terrain = new Terrain(width, depth);
         Dimension terrainDimension = new Dimension(width, depth);
 
         JSONArray jsonSun = jsonTerrain.getJSONArray("sunlight");

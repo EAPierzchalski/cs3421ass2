@@ -18,19 +18,19 @@ public class Terrain {
     private double[][] myAltitude;
     private List<Tree> myTrees;
     private List<Road> myRoads;
-    private float[] mySunlight;
+    private float[] mySunlightDirection;
 
     public Terrain(
             Dimension mySize,
             double[][] myAltitude,
             List<Tuple2<Double, Double>> treePositions,
             List<Road> myRoads,
-            float[] mySunlight) {
+            float[] mySunlightDirection) {
         this.mySize = mySize;
         this.myAltitude = myAltitude;
         this.myTrees = treesFrom2DPositions(treePositions);
         this.myRoads = myRoads;
-        this.mySunlight = mySunlight;
+        this.mySunlightDirection = mySunlightDirection;
     }
 
     public Dimension size() {
@@ -46,7 +46,7 @@ public class Terrain {
     }
 
     public float[] getSunlight() {
-        return Util.copyArray(mySunlight);
+        return Util.copyArray(mySunlightDirection);
     }
 
     /**
@@ -71,9 +71,18 @@ public class Terrain {
      * @return
      */
     public double altitude(double x, double z) {
-        double altitude = 0;
-
-
+        double altitude;
+        double maxX = mySize.getHeight();
+        double maxZ = mySize.getWidth();
+        if (0 <= x && x < maxX && 0 <= z && z < maxZ) {
+            double quadX = x - Math.floor(x);
+            double quadZ = z - Math.floor(z);
+            int gridX = (int) Math.floor(x);
+            int gridZ = (int) Math.floor(z);
+            altitude = 0;
+        } else {
+            altitude = 0;
+        }
         return altitude;
     }
 
