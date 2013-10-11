@@ -1,8 +1,10 @@
 package ass2.engine.controller.keyinput;
 
 import ass2.engine.controller.keyinput.bindings.GameAction;
-import ass2.engine.controller.keyinput.bindings.KeyAction;
+import ass2.engine.controller.keyinput.bindings.KeyPressedAction;
+import ass2.engine.controller.keyinput.bindings.KeyReleasedAction;
 import ass2.engine.model.GameModel;
+import ass2.util.MyKeyStroke;
 
 import javax.swing.*;
 import java.util.HashSet;
@@ -27,20 +29,26 @@ public class KeyBinder {
         triggeredGameActions.add(gameAction);
     }
 
+    public void cancelGameAction(GameAction gameAction) {
+        triggeredGameActions.remove(gameAction);
+    }
+
     public void update(double dt) {
         for (GameAction gameAction : triggeredGameActions) {
             gameAction.doActionOn(gameModel, dt);
         }
-        triggeredGameActions.clear();
     }
 
     public void bindToPanel(JComponent jComponent) {
         for (GameAction gameAction : GameAction.values()) {
-            for (KeyStroke triggeringKeyStroke : gameAction.getTriggeringKeyStrokes()) {
-                jComponent.getInputMap().put(triggeringKeyStroke, gameAction);
+            for (MyKeyStroke triggeringKeyStroke : gameAction.getTriggeringKeyStrokes()) {
+                jComponent.getInputMap().put(triggeringKeyStroke.PRESSED, gameAction + "PRESSED");
+                jComponent.getInputMap().put(triggeringKeyStroke.RELEASED, gameAction + "RELEASED");
             }
-            KeyAction keyAction = new KeyAction(gameAction, this);
-            jComponent.getActionMap().put(gameAction, keyAction);
+            KeyPressedAction keyPressedAction = new KeyPressedAction(gameAction, this);
+            jComponent.getActionMap().put(gameAction + "PRESSED", keyPressedAction);
+            KeyReleasedAction keyReleasedAction = new KeyReleasedAction(gameAction, this);
+            jComponent.getActionMap().put(gameAction + "RELEASED", keyReleasedAction);
         }
     }
 

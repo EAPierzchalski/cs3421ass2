@@ -1,9 +1,8 @@
 package ass2.engine.controller.keyinput.bindings;
 
 import ass2.engine.model.GameModel;
-import ass2.util.KeyStrokes;
+import ass2.util.MyKeyStroke;
 
-import javax.swing.*;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,42 +16,42 @@ import java.util.Set;
  */
 
 public enum GameAction {
-    MOVE_FORWARD(KeyStrokes.UP, KeyStrokes.W) {
+    MOVE_FORWARD(MyKeyStroke.UP, MyKeyStroke.W) {
         @Override
         public void doActionOn(GameModel gameModel, double dt) {
             gameModel.moveForward(dt);
         }
     },
 
-    TURN_LEFT(KeyStrokes.A, KeyStrokes.LEFT) {
+    TURN_LEFT(MyKeyStroke.A, MyKeyStroke.LEFT) {
         @Override
         public void doActionOn(GameModel gameModel, double dt) {
             gameModel.rotatePlayerLookDirection(-dt);
         }
     },
 
-    TURN_RIGHT(KeyStrokes.D, KeyStrokes.RIGHT) {
+    TURN_RIGHT(MyKeyStroke.D, MyKeyStroke.RIGHT) {
         @Override
         public void doActionOn(GameModel gameModel, double dt) {
             gameModel.rotatePlayerLookDirection(dt);
         }
     },
 
-    MOVE_BACK(KeyStrokes.S, KeyStrokes.DOWN) {
+    MOVE_BACK(MyKeyStroke.S, MyKeyStroke.DOWN) {
         @Override
         public void doActionOn(GameModel gameModel, double dt) {
             gameModel.moveForward(-dt);
         }
     };
 
-    private Set<KeyStroke> triggeringKeyStrokes;
+    private Set<MyKeyStroke> triggeringKeyStrokes;
 
-    private GameAction(KeyStroke... triggeringKeyStrokes) {
-        this.triggeringKeyStrokes = new HashSet<KeyStroke>();
+    private GameAction(MyKeyStroke... triggeringKeyStrokes) {
+        this.triggeringKeyStrokes = new HashSet<MyKeyStroke>();
         Collections.addAll(this.triggeringKeyStrokes, triggeringKeyStrokes);
     }
 
-    public Set<KeyStroke> getTriggeringKeyStrokes() {
+    public Set<MyKeyStroke> getTriggeringKeyStrokes() {
         return triggeringKeyStrokes;
     }
 

@@ -11,18 +11,18 @@ import java.awt.event.ActionEvent;
  * Package: ass2.engine.controller.keyinput.bindings
  * Project: cs3421ass2
  */
-public class KeyAction extends AbstractAction {
+public class KeyReleasedAction extends AbstractAction {
 
     private GameAction gameAction;
     private KeyBinder keyBinder;
 
-    public KeyAction(GameAction gameAction, KeyBinder keyBinder) {
+    public KeyReleasedAction(GameAction gameAction, KeyBinder keyBinder) {
         this.gameAction = gameAction;
         this.keyBinder = keyBinder;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        keyBinder.registerGameAction(gameAction);
+        keyBinder.cancelGameAction(gameAction);
     }
 }
