@@ -106,7 +106,7 @@ public class LevelIO {
         json.put("depth", size.height);
 
         JSONArray jsonSun = new JSONArray();
-        float[] sunlight = terrain.getSunlight();
+        float[] sunlight = terrain.getSunlightDirection();
         jsonSun.put(sunlight[0]);
         jsonSun.put(sunlight[1]);
         jsonSun.put(sunlight[2]);

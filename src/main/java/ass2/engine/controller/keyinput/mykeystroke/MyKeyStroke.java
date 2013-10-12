@@ -1,4 +1,4 @@
-package ass2.util;
+package ass2.engine.controller.keyinput.mykeystroke;
 
 import java.awt.event.KeyEvent;
 

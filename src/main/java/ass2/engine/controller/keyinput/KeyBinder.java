@@ -4,7 +4,7 @@ import ass2.engine.controller.keyinput.bindings.GameAction;
 import ass2.engine.controller.keyinput.bindings.KeyPressedAction;
 import ass2.engine.controller.keyinput.bindings.KeyReleasedAction;
 import ass2.engine.model.GameModel;
-import ass2.util.MyKeyStroke;
+import ass2.engine.controller.keyinput.mykeystroke.MyKeyStroke;
 
 import javax.swing.*;
 import java.util.HashSet;

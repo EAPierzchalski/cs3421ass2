@@ -29,15 +29,37 @@ public class Util {
     }
 
     public static double[] normalize(double[] v) {
-        double length = 0;
+        double norm = 0;
         for (double x : v) {
-            length += Math.pow(x, 2);
+            norm += Math.pow(x, 2);
         }
-        length = Math.pow(length, 0.5);
+        norm = Math.pow(norm, 0.5);
         double[] normalizedV = new double[v.length];
         for (int i = 0; i < normalizedV.length; i++) {
-            normalizedV[i] = v[i]/length;
+            normalizedV[i] = v[i]/norm;
         }
         return normalizedV;
+    }
+
+    public static double[] cross(double[] v1, double[] v2) {
+        double[] crossV = new double[v1.length];
+        crossV[0] = v1[1] * v2[2] - v1[2] * v2[1];
+        crossV[1] = v1[2] * v2[0] - v1[0] * v2[0];
+        crossV[2] = v1[0] * v2[1] - v1[1] * v2[0];
+        return crossV;
+    }
+
+    /**
+     *
+     * @param v1
+     * @param v2
+     * @return v1 - v2
+     */
+    public static double[] sub(double[] v1, double[] v2) {
+        double[] v1subV2 = new double[v1.length];
+        for (int i = 0; i < v1subV2.length; i++) {
+            v1subV2[i] = v1[i] - v2[i];
+        }
+        return v1subV2;
     }
 }

@@ -45,7 +45,7 @@ public class Terrain {
         return myRoads;
     }
 
-    public float[] getSunlight() {
+    public float[] getSunlightDirection() {
         return Util.copyArray(mySunlightDirection);
     }
 

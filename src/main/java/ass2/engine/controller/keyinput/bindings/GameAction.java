@@ -1,7 +1,7 @@
 package ass2.engine.controller.keyinput.bindings;
 
 import ass2.engine.model.GameModel;
-import ass2.util.MyKeyStroke;
+import ass2.engine.controller.keyinput.mykeystroke.MyKeyStroke;
 
 import java.util.Collections;
 import java.util.HashSet;

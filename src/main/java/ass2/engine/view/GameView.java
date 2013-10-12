@@ -2,6 +2,7 @@ package ass2.engine.view;
 
 import ass2.engine.controller.Mouse;
 import ass2.engine.model.GameModel;
+import ass2.engine.view.render.TerrainDrawer;
 import com.jogamp.opengl.util.gl2.GLUT;
 
 import javax.media.opengl.GL;
@@ -19,14 +20,17 @@ public class GameView implements GLEventListener {
 
     private GameModel gameModel;
     private Camera camera;
+    private TerrainDrawer terrainDrawer;
 
     private static final double[] BACKGROUND_COLOR = new double[]{0, 0, 0, 1};
     private static final float[] SUNLIGHT_DIFFUSE_COLOR = new float[]{1f, 1f, 1f, 1f};
     private static final float[] SUNLIGHT_AMBIENT_COLOR = new float[]{0.2f, 0.2f, 0.2f, 1f};
+    private static final float[] TERRAIN_COLOR = new float[]{0, 1, 0, 1};
 
     public GameView(GameModel gameModel) {
         this.gameModel = gameModel;
         this.camera = new Camera(gameModel.getPlayer3DPosition(), gameModel.getPlayerLookDirection());
+        this.terrainDrawer = new TerrainDrawer(gameModel.getTerrain());
     }
 
     @Override
@@ -74,6 +78,7 @@ public class GameView implements GLEventListener {
         gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
         gl.glPushMatrix(); {
             gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, getSunlightPosition(), 0);
+            terrainDrawer.drawTerrain(gl, TERRAIN_COLOR);
             gl.glTranslated(2, 1, 0);
             gl.glRotated(60, 0, 1, 1);
             GLUT glut = new GLUT();
@@ -82,7 +87,7 @@ public class GameView implements GLEventListener {
     }
 
     private float[] getSunlightPosition() {
-        float[] sunlight = gameModel.getTerrain().getSunlight();
+        float[] sunlight = gameModel.getTerrain().getSunlightDirection();
         for (int i = 0; i < sunlight.length; i++) {
             sunlight[i] *= -1;
         }
