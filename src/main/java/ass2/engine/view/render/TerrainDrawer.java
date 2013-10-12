@@ -96,7 +96,7 @@ public class TerrainDrawer {
 
         for (int quadX = 0; quadX < maxQuadX; quadX++) {
             for (int quadZ = 0; quadZ < maxQuadZ; quadZ++) {
-                int currentFaceIndex = quadX * maxQuadZ + quadZ;
+                int currentFaceIndex = FACES_PER_TERRAIN_QUAD * (quadX * maxQuadZ + quadZ);
 
                 this.faceVertices[currentFaceIndex] = new double[][] {
                         terrainGridVertices[quadX][quadZ],
@@ -105,26 +105,26 @@ public class TerrainDrawer {
                 };
                 this.faceNormals[currentFaceIndex]     = this.terrainQuadQuarterNormals[quadX][quadZ][0];
 
-                this.faceVertices[currentFaceIndex + numQuads] = new double[][] {
+                this.faceVertices[currentFaceIndex + 1] = new double[][] {
                         terrainGridVertices[quadX + 1][quadZ],
                         terrainGridVertices[quadX + 1][quadZ + 1],
                         terrainQuadCentreVertices[quadX][quadZ]
                 };
-                this.faceNormals[currentFaceIndex + numQuads] = this.terrainQuadQuarterNormals[quadX][quadZ][1];
+                this.faceNormals[currentFaceIndex + 1] = this.terrainQuadQuarterNormals[quadX][quadZ][1];
 
-                this.faceVertices[currentFaceIndex + 2 * numQuads] = new double[][] {
+                this.faceVertices[currentFaceIndex + 2] = new double[][] {
                         terrainGridVertices[quadX + 1][quadZ + 1],
                         terrainGridVertices[quadX][quadZ + 1],
                         terrainQuadCentreVertices[quadX][quadZ]
                 };
-                this.faceNormals[currentFaceIndex + 2 * numQuads] = this.terrainQuadQuarterNormals[quadX][quadZ][2];
+                this.faceNormals[currentFaceIndex + 2] = this.terrainQuadQuarterNormals[quadX][quadZ][2];
 
-                this.faceVertices[currentFaceIndex + 3 * numQuads] = new double[][] {
+                this.faceVertices[currentFaceIndex + 3] = new double[][] {
                         terrainGridVertices[quadX][quadZ + 1],
                         terrainGridVertices[quadX][quadZ],
                         terrainQuadCentreVertices[quadX][quadZ]
                 };
-                this.faceNormals[currentFaceIndex + 3 * numQuads] = this.terrainQuadQuarterNormals[quadX][quadZ][3];
+                this.faceNormals[currentFaceIndex + 3] = this.terrainQuadQuarterNormals[quadX][quadZ][3];
             }
         }
 

@@ -2,6 +2,7 @@ package ass2.engine.view;
 
 import ass2.engine.controller.Mouse;
 import ass2.engine.model.GameModel;
+import ass2.engine.view.render.DrawUtil;
 import ass2.engine.view.render.TerrainDrawer;
 import com.jogamp.opengl.util.gl2.GLUT;
 
@@ -45,6 +46,8 @@ public class GameView implements GLEventListener {
         gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, SUNLIGHT_AMBIENT_COLOR, 0);
 
         gl.glEnable(GL2.GL_NORMALIZE);
+
+        gl.glShadeModel(GL2.GL_SMOOTH);
     }
 
     @Override
@@ -78,12 +81,14 @@ public class GameView implements GLEventListener {
         gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
         gl.glPushMatrix(); {
             gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, getSunlightPosition(), 0);
-            terrainDrawer.drawTerrain(gl, TERRAIN_COLOR);
+            DrawUtil.drawAxes(gl);
+            //terrainDrawer.drawTerrain(gl, TERRAIN_COLOR);
             gl.glTranslated(2, 1, 0);
             gl.glRotated(60, 0, 1, 1);
             GLUT glut = new GLUT();
             glut.glutSolidCube(1f);
         } gl.glPopMatrix();
+        gl.glFlush();
     }
 
     private float[] getSunlightPosition() {

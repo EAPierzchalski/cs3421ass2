@@ -20,4 +20,23 @@ public class DrawUtil {
             }
         } gl.glEnd();
     }
+
+    public static void drawAxes(GL2 gl) {
+        gl.glLineWidth(3);
+        gl.glBegin(GL2.GL_LINES); {
+            gl.glColor3f(1, 0, 0);
+            gl.glVertex3d(0, 0, 0);
+            gl.glVertex3d(1, 0, 0);
+        } gl.glEnd();
+        gl.glBegin(GL2.GL_LINES); {
+            gl.glColor3f(0, 1, 0);
+            gl.glVertex3d(0, 0, 0);
+            gl.glVertex3d(0, 1, 0);
+        } gl.glEnd();
+        gl.glBegin(GL2.GL_LINES); {
+            gl.glColor3f(0, 0, 1);
+            gl.glVertex3d(0, 0, 0);
+            gl.glVertex3d(0, 0, 1);
+        } gl.glEnd();
+    }
 }
