@@ -4,7 +4,6 @@ import ass2.engine.controller.Mouse;
 import ass2.engine.model.GameModel;
 import ass2.engine.view.render.DrawUtil;
 import ass2.engine.view.render.TerrainDrawer;
-import com.jogamp.opengl.util.gl2.GLUT;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
@@ -79,19 +78,15 @@ public class GameView implements GLEventListener {
         gl.glColor4dv(BACKGROUND_COLOR, 0);
         gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
         gl.glPushMatrix(); {
-            gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, getSunlightPosition(), 0);
-            DrawUtil.drawAxes(gl);
-            drawSunlight(gl);
+            gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, getSunlightPositionFloat(), 0);
+            //DrawUtil.drawAxes(gl);
+            //drawSunlight(gl);
             terrainDrawer.drawTerrain(gl);
-            gl.glTranslated(2, 1, 0);
-            gl.glRotated(60, 0, 1, 1);
-            GLUT glut = new GLUT();
-            glut.glutSolidCube(1f);
         } gl.glPopMatrix();
         gl.glFlush();
     }
 
-    private float[] getSunlightPosition() {
+    private float[] getSunlightPositionFloat() {
         float[] sunlight = gameModel.getTerrain().getSunlightDirection();
         for (int i = 0; i < sunlight.length; i++) {
             sunlight[i] *= -1;
@@ -99,13 +94,17 @@ public class GameView implements GLEventListener {
         return sunlight;
     }
 
+    private double[] getSunlightPositionDouble() {
+        float[] sunlight = gameModel.getTerrain().getSunlightDirection();
+        double[] sunlightd = new double[sunlight.length];
+        for (int i = 0; i < sunlightd.length; i++) {
+            sunlightd[i] = sunlight[i] * -1;
+        }
+        return sunlightd;
+    }
+
     private static final float[] YELLOW = new float[]{1, 1, 0, 1};
     private void drawSunlight(GL2 gl) {
-        gl.glLineWidth(3);
-        gl.glBegin(GL2.GL_LINES); {
-            gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, YELLOW, 0);
-            gl.glVertex3d(0, 0, 0);
-            gl.glVertex3fv(getSunlightPosition(), 0);
-        } gl.glEnd();
+        DrawUtil.drawLine(gl, new double[]{0, 0, 0}, getSunlightPositionDouble(), YELLOW);
     }
 }

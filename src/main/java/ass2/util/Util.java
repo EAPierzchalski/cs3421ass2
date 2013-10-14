@@ -44,7 +44,7 @@ public class Util {
     public static double[] cross(double[] v1, double[] v2) {
         double[] crossV = new double[v1.length];
         crossV[0] = v1[1] * v2[2] - v1[2] * v2[1];
-        crossV[1] = v1[2] * v2[0] - v1[0] * v2[0];
+        crossV[1] = v1[2] * v2[0] - v1[0] * v2[2];
         crossV[2] = v1[0] * v2[1] - v1[1] * v2[0];
         return crossV;
     }
@@ -61,5 +61,21 @@ public class Util {
             v1subV2[i] = v1[i] - v2[i];
         }
         return v1subV2;
+    }
+
+    public static double[] sum(double[] v1, double[] v2) {
+        double[] v1addV2 = new double[v1.length];
+        for (int i = 0; i < v1addV2.length; i++) {
+            v1addV2[i] = v1[i] + v2[i];
+        }
+        return v1addV2;
+    }
+
+    public static double[] scale(double[] v, double s) {
+        double[] vScaleS = new double[v.length];
+        for (int i = 0; i < vScaleS.length; i++) {
+            vScaleS[i] = v[i] * s;
+        }
+        return vScaleS;
     }
 }

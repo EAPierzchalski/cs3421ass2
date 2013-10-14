@@ -3,12 +3,12 @@ package ass2.engine.controller.keyinput;
 import ass2.engine.controller.keyinput.bindings.GameAction;
 import ass2.engine.controller.keyinput.bindings.KeyPressedAction;
 import ass2.engine.controller.keyinput.bindings.KeyReleasedAction;
-import ass2.engine.model.GameModel;
 import ass2.engine.controller.keyinput.mykeystroke.MyKeyStroke;
+import ass2.engine.model.GameModel;
 
 import javax.swing.*;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,7 +19,7 @@ import java.util.Set;
  */
 public class KeyBinder {
     private GameModel gameModel;
-    private Set<GameAction> triggeredGameActions = new HashSet<GameAction>();
+    private Set<GameAction> triggeredGameActions = new ConcurrentSkipListSet<GameAction>();
 
     public KeyBinder(GameModel gameModel) {
         this.gameModel = gameModel;
@@ -35,7 +35,7 @@ public class KeyBinder {
 
     public void update(double dt) {
         for (GameAction gameAction : triggeredGameActions) {
-            gameAction.doActionOn(gameModel, dt);
+            gameAction.doActionOn(gameModel, dt, this);
         }
     }
 

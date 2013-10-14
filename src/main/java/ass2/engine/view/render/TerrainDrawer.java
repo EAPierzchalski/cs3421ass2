@@ -12,112 +12,97 @@ import javax.media.opengl.GL2;
  * Project: cs3421ass2
  */
 public class TerrainDrawer {
-    private static final int FACES_PER_TERRAIN_QUAD = 4;
+    private static final int VERTICES_PER_QUAD_QUARTER = 3;
     private static final float[] TERRAIN_COLOR = new float[]{0.4f, 1f, 0.1f, 1};
-
-    private Terrain terrain;
 
     private double[][][] faceVertices;
     private double[][] faceNormals;
 
-    /***
-     * terrainQuadGridVertices is a 2D array of vertex positions of the grid vertices of the terrain.
-     */
-    private double[][][] terrainGridVertices;
-
-    /***
-     * terrainQuadCentreVertices is a 2D array of vertex positions of the centres of the quads of the terrain.
-     * terrainQuadCentreVertices[x][z] = {x + 1/2, average height of surrounding vertices, z + 1/2}.
-     */
-    private double[][][] terrainQuadCentreVertices;
-
-    /***
-     * terrainQuadQuarterNormals[x][z][s] is the normal for the s'th quarter of the [x, z] quad.
-     * the 0th quarter is [x, z] to [x+1, z]
-     * the 1st quarter is [x+1, z] to [x+1, z+1]
-     * the 2nd quarter is [x+1, z+1] to [x, z+1]
-     * the 3rd quarter is [x, z+1] to [x, z]
-     */
-    private double[][][][] terrainQuadQuarterNormals;
-
     public TerrainDrawer(Terrain terrain) {
-        this.terrain = terrain;
+
+        /**
+         terrainQuadGridVertices is a 2D array of vertex positions of the grid vertices of the terrain.
+         */double[][][] gridVertices = gridVertices(terrain);
+
+        /**
+         quadCentreVertices is a 2D array of vertex positions of the centres of the quads of the terrain.
+         quadCentreVertices[x][z] = {x + 1/2, average height of surrounding vertices, z + 1/2}.
+         */double[][][] quadCentreVertices = quadCentreVertices(terrain);
+
+        /**
+         terrainQuadQuarterNormals[x][z][s] is the normal for the s'th quarter of the [x, z] quad.
+         */double[][][][] terrainQuadQuarterNormals = quadQuarterNormals(
+                terrain,
+                gridVertices,
+                quadCentreVertices);
+
         int maxGridX = terrain.size().width;
         int maxQuadX = maxGridX - 1;
         int maxGridZ = terrain.size().height;
         int maxQuadZ = maxGridZ - 1;
 
-        this.terrainGridVertices = getTerrainGridVerticesFromTerrain(terrain);
-
-        this.terrainQuadCentreVertices = getTerrainQuadCentreVerticesFromTerrain(terrain);
-
-        this.terrainQuadQuarterNormals = new double[maxQuadX][maxQuadZ][Direction.values().length][];
-        for (int x = 0; x < maxQuadX; x++) {
-            for (int z = 0; z < maxQuadZ; z++) {
-                for (Direction direction: Direction.values()) {
-                    terrainQuadQuarterNormals[x][z][direction.ordinal()] =
-                            quarterNormal(x, z, direction, terrainGridVertices, terrainQuadCentreVertices);
-                }
-            }
-        }
-
         int numQuads = maxQuadX * maxQuadZ;
-        this.faceVertices = new double[FACES_PER_TERRAIN_QUAD * numQuads][][];
-        this.faceNormals = new double[FACES_PER_TERRAIN_QUAD * numQuads][];
+        int numFaces = numQuads * Direction.values().length;
+        this.faceVertices = new double[numFaces][VERTICES_PER_QUAD_QUARTER][];
+        this.faceNormals = new double[numFaces][];
 
+        int faceIndex = 0;
         for (int quadX = 0; quadX < maxQuadX; quadX++) {
             for (int quadZ = 0; quadZ < maxQuadZ; quadZ++) {
-                int currentFaceIndex = FACES_PER_TERRAIN_QUAD * (quadX * maxQuadZ + quadZ);
+                for (Direction direction: Direction.values()) {
+                    this.faceVertices[faceIndex][0] = quadCentreVertices[quadX][quadZ];
 
-                this.faceVertices[currentFaceIndex] = new double[][] {
-                        terrainGridVertices[quadX][quadZ],
-                        terrainGridVertices[quadX + 1][quadZ],
-                        terrainQuadCentreVertices[quadX][quadZ]
-                };
-                this.faceNormals[currentFaceIndex]     = this.terrainQuadQuarterNormals[quadX][quadZ][0];
+                    int cornerGridX1 = quadX + direction.quadCorners[0][0];
+                    int cornerGridZ1 = quadZ + direction.quadCorners[0][1];
+                    this.faceVertices[faceIndex][1] = gridVertices[cornerGridX1][cornerGridZ1];
 
-                this.faceVertices[currentFaceIndex + 1] = new double[][] {
-                        terrainGridVertices[quadX + 1][quadZ],
-                        terrainGridVertices[quadX + 1][quadZ + 1],
-                        terrainQuadCentreVertices[quadX][quadZ]
-                };
-                this.faceNormals[currentFaceIndex + 1] = this.terrainQuadQuarterNormals[quadX][quadZ][1];
+                    int cornerGridX2 = quadX + direction.quadCorners[1][0];
+                    int cornerGridZ2 = quadZ + direction.quadCorners[1][1];
+                    this.faceVertices[faceIndex][2] = gridVertices[cornerGridX2][cornerGridZ2];
 
-                this.faceVertices[currentFaceIndex + 2] = new double[][] {
-                        terrainGridVertices[quadX + 1][quadZ + 1],
-                        terrainGridVertices[quadX][quadZ + 1],
-                        terrainQuadCentreVertices[quadX][quadZ]
-                };
-                this.faceNormals[currentFaceIndex + 2] = this.terrainQuadQuarterNormals[quadX][quadZ][2];
+                    this.faceNormals[faceIndex] = terrainQuadQuarterNormals[quadX][quadZ][direction.ordinal()];
 
-                this.faceVertices[currentFaceIndex + 3] = new double[][] {
-                        terrainGridVertices[quadX][quadZ + 1],
-                        terrainGridVertices[quadX][quadZ],
-                        terrainQuadCentreVertices[quadX][quadZ]
-                };
-                this.faceNormals[currentFaceIndex + 3] = this.terrainQuadQuarterNormals[quadX][quadZ][3];
+                    faceIndex++;
+                }
             }
         }
 
     }
 
-    private static double[][][] getTerrainGridVerticesFromTerrain(Terrain terrain) {
+    private static double[][][][] quadQuarterNormals(
+            Terrain terrain,
+            double[][][] gridVertices,
+            double[][][] quadCentreVertices) {
+        int maxQuadX = terrain.size().width - 1;
+        int maxQuadZ = terrain.size().height - 1;
+        double[][][][] quarterNormals = new double[maxQuadX][maxQuadZ][Direction.values().length][];
+        for (int x = 0; x < maxQuadX; x++) {
+            for (int z = 0; z < maxQuadZ; z++) {
+                for (Direction direction: Direction.values()) {
+                    quarterNormals[x][z][direction.ordinal()] =
+                            quarterNormal(x, z, direction, gridVertices, quadCentreVertices);
+                }
+            }
+        }
+        return quarterNormals;
+    }
+
+    private static double[][][] gridVertices(Terrain terrain) {
         int maxGridX = terrain.size().width;
         int maxGridZ = terrain.size().height;
         double[][][] terrainGridVertices = new double[maxGridX][maxGridZ][];
         for (int gridX = 0; gridX < maxGridX; gridX++) {
             for (int gridZ = 0; gridZ < maxGridZ; gridZ++) {
-                terrainGridVertices[gridX][gridZ] = new double[]{
-                        gridX,
+                terrainGridVertices[gridX][gridZ] = new double[]
+                       {gridX,
                         terrain.getGridAltitude(gridX, gridZ),
-                        gridZ
-                };
+                        gridZ};
             }
         }
         return terrainGridVertices;
     }
 
-    private static double[][][] getTerrainQuadCentreVerticesFromTerrain(Terrain terrain) {
+    private static double[][][] quadCentreVertices(Terrain terrain) {
         int maxQuadX = terrain.size().width - 1;
         int maxQuadZ = terrain.size().height - 1;
         double[][][] terrainQuadCentreVertices = new double[maxQuadX][maxQuadZ][];
@@ -125,53 +110,26 @@ public class TerrainDrawer {
             for (int quadZ = 0; quadZ < maxQuadZ; quadZ++) {
                 double averageBoundaryAltitude = (
                         terrain.getGridAltitude(quadX, quadZ) +
-                                terrain.getGridAltitude(quadX + 1, quadZ) +
-                                terrain.getGridAltitude(quadX + 1, quadZ + 1) +
-                                terrain.getGridAltitude(quadX, quadZ + 1)
-                ) / 4;
-                terrainQuadCentreVertices[quadX][quadZ] = new double[]{
-                        quadX + 0.5,
+                        terrain.getGridAltitude(quadX + 1, quadZ) +
+                        terrain.getGridAltitude(quadX + 1, quadZ + 1) +
+                        terrain.getGridAltitude(quadX, quadZ + 1)) / 4;
+                terrainQuadCentreVertices[quadX][quadZ] = new double[]
+                       {quadX + 0.5,
                         averageBoundaryAltitude,
-                        quadZ + 0.5
-                };
+                        quadZ + 0.5};
             }
         }
         return terrainQuadCentreVertices;
     }
 
-/*    private double[] quarterNormal(
-            int quadX, int quadZ,
-            int cornerX1, int cornerZ1,
-            int cornerX2, int cornerZ2) {
-        double[] centreToCorner1 = Util.sub(
-                terrainGridVertices[cornerX1][cornerZ1],
-                terrainQuadCentreVertices[quadX][quadZ]
-        );
-        double[] centreToCorner2 = Util.sub(
-                terrainGridVertices[cornerX2][cornerZ2],
-                terrainQuadCentreVertices[quadX][quadZ]
-        );
-        return Util.cross(centreToCorner1, centreToCorner2);
-    }*/
-
-    public void drawTerrain(GL2 gl) {
-        gl.glPushMatrix(); {
-            gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
-            gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, TERRAIN_COLOR, 0);
-            gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, TERRAIN_COLOR, 0);
-            for (int faceIndex = 0; faceIndex < faceVertices.length; faceIndex ++) {
-                DrawUtil.drawPolygon3d(gl, faceVertices[faceIndex], faceNormals[faceIndex]);
-            }
-        } gl.glPopMatrix();
-    }
-
-    private double[] quarterNormal(
+    private static double[] quarterNormal(
             int gridX,
             int gridZ,
             Direction quadQuarter,
             double[][][] gridVertices,
             double[][][] quadCentreVertices) {
         double[] centreVertex = quadCentreVertices[gridX][gridZ];
+
         int cornerGridX1 = gridX + quadQuarter.quadCorners[0][0];
         int cornerGridZ1 = gridZ + quadQuarter.quadCorners[0][1];
         double[] quarterVertex1 = gridVertices[cornerGridX1][cornerGridZ1];
@@ -182,19 +140,42 @@ public class TerrainDrawer {
 
         double[] v1 = Util.sub(quarterVertex1, centreVertex);
         double[] v2 = Util.sub(quarterVertex2, centreVertex);
-        return Util.cross(v2, v1);
+
+        return Util.cross(v1, v2);
     }
 
     private enum Direction {
-        NORTH(1, 1, 0, 1),
-        EAST(1, 0, 1, 1),
-        SOUTH(0, 0, 1, 0),
-        WEST(0, 1, 0, 0);
+        NORTH(0, 1, 1, 1),
+        EAST(1, 1, 1, 0),
+        SOUTH(1, 0, 0, 0),
+        WEST(0, 0, 0, 1);
 
         public int[][] quadCorners;
 
         private Direction(int x1, int z1, int x2, int z2) {
             this.quadCorners = new int[][]{{x1, z1}, {x2, z2}};
         }
+    }
+
+    //private static final float[] GREY = new float[]{0.5f, 0.5f, 0.5f, 1};
+    public void drawTerrain(GL2 gl) {
+        gl.glPushMatrix(); {
+            gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
+            for (int faceIndex = 0; faceIndex < faceVertices.length; faceIndex ++) {
+                DrawUtil.drawPolygon3d(gl, faceVertices[faceIndex], faceNormals[faceIndex], TERRAIN_COLOR);
+
+                /*double[] faceCentroid = new double[] {0, 0, 0};
+                for (double[] vertex: faceVertices[faceIndex]) {
+                    faceCentroid = Util.sum(faceCentroid, vertex);
+                }
+                faceCentroid = Util.scale(faceCentroid, 1.0/faceVertices[faceIndex].length);
+
+                DrawUtil.drawLine(
+                        gl,
+                        faceCentroid,
+                        Util.sum(faceCentroid, faceNormals[faceIndex]),
+                        GREY);*/
+            }
+        } gl.glPopMatrix();
     }
 }

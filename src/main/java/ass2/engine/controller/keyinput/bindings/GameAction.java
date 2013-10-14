@@ -1,5 +1,6 @@
 package ass2.engine.controller.keyinput.bindings;
 
+import ass2.engine.controller.keyinput.KeyBinder;
 import ass2.engine.model.GameModel;
 import ass2.engine.controller.keyinput.mykeystroke.MyKeyStroke;
 
@@ -18,42 +19,48 @@ import java.util.Set;
 public enum GameAction {
     MOVE_FORWARD(MyKeyStroke.UP, MyKeyStroke.W) {
         @Override
-        public void doActionOn(GameModel gameModel, double dt) {
+        public void doActionOn(GameModel gameModel, double dt, KeyBinder sourceBinder) {
+            sourceBinder.cancelGameAction(MOVE_BACK);
             gameModel.moveForward(dt);
         }
     },
 
     TURN_LEFT(MyKeyStroke.A, MyKeyStroke.LEFT) {
         @Override
-        public void doActionOn(GameModel gameModel, double dt) {
+        public void doActionOn(GameModel gameModel, double dt, KeyBinder sourceBinder) {
+            sourceBinder.cancelGameAction(TURN_RIGHT);
             gameModel.rotatePlayerLookDirection(-dt);
         }
     },
 
     TURN_RIGHT(MyKeyStroke.D, MyKeyStroke.RIGHT) {
         @Override
-        public void doActionOn(GameModel gameModel, double dt) {
+        public void doActionOn(GameModel gameModel, double dt, KeyBinder sourceBinder) {
+            sourceBinder.cancelGameAction(TURN_LEFT);
             gameModel.rotatePlayerLookDirection(dt);
         }
     },
 
     MOVE_BACK(MyKeyStroke.S, MyKeyStroke.DOWN) {
         @Override
-        public void doActionOn(GameModel gameModel, double dt) {
+        public void doActionOn(GameModel gameModel, double dt, KeyBinder sourceBinder) {
+            sourceBinder.cancelGameAction(MOVE_FORWARD);
             gameModel.moveForward(-dt);
         }
     },
 
     JUMP(MyKeyStroke.SPACE) {
         @Override
-        public void doActionOn(GameModel gameModel, double dt) {
+        public void doActionOn(GameModel gameModel, double dt, KeyBinder sourceBinder) {
+            sourceBinder.cancelGameAction(DROP);
             gameModel.jump(dt);
         }
     },
 
     DROP(MyKeyStroke.V, MyKeyStroke.SHIFT) {
         @Override
-        public void doActionOn(GameModel gameModel, double dt) {
+        public void doActionOn(GameModel gameModel, double dt, KeyBinder sourceBinder) {
+            sourceBinder.cancelGameAction(JUMP);
             gameModel.jump(-dt);
         }
     };
@@ -70,5 +77,5 @@ public enum GameAction {
         return triggeringKeyStrokes;
     }
 
-    public abstract void doActionOn(GameModel gameModel, double dt);
+    public abstract void doActionOn(GameModel gameModel, double dt, KeyBinder sourceBinder);
 }
