@@ -55,7 +55,7 @@ public class TerrainDrawer {
         for (int x = 0; x < maxQuadX; x++) {
             for (int z = 0; z < maxQuadZ; z++) {
                 for (Direction direction: Direction.values()) {
-                    terrainQuadQuarterNormals[x][z][direction.index] =
+                    terrainQuadQuarterNormals[x][z][direction.ordinal()] =
                             quarterNormal(x, z, direction, terrainGridVertices, terrainQuadCentreVertices);
                 }
             }
@@ -186,17 +186,15 @@ public class TerrainDrawer {
     }
 
     private enum Direction {
-        NORTH(1, 1, 0, 1, 0),
-        EAST(1, 0, 1, 1, 1),
-        SOUTH(0, 0, 1, 0, 2),
-        WEST(0, 1, 0, 0, 3);
+        NORTH(1, 1, 0, 1),
+        EAST(1, 0, 1, 1),
+        SOUTH(0, 0, 1, 0),
+        WEST(0, 1, 0, 0);
 
         public int[][] quadCorners;
-        public int index;
 
-        private Direction(int x1, int z1, int x2, int z2, int index) {
+        private Direction(int x1, int z1, int x2, int z2) {
             this.quadCorners = new int[][]{{x1, z1}, {x2, z2}};
-            this.index = index;
         }
     }
 }
