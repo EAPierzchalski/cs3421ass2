@@ -15,19 +15,21 @@ import java.util.List;
 public class Terrain {
 
     private Dimension mySize;
-    private double[][] myAltitude;
+    private double[][] myGridAltitude;
+    private double[][] myCentreAltitude;
     private List<Tree> myTrees;
     private List<Road> myRoads;
     private float[] mySunlightDirection;
 
     public Terrain(
             Dimension mySize,
-            double[][] myAltitude,
+            double[][] myGridAltitude,
             List<Tuple2<Double, Double>> treePositions,
             List<Road> myRoads,
             float[] mySunlightDirection) {
         this.mySize = mySize;
-        this.myAltitude = myAltitude;
+        this.myGridAltitude = myGridAltitude;
+        this.myCentreAltitude = centreAltitudes(mySize, myGridAltitude);
         this.myTrees = treesFrom2DPositions(treePositions);
         this.myRoads = myRoads;
         this.mySunlightDirection = mySunlightDirection;
@@ -57,7 +59,7 @@ public class Terrain {
      * @return
      */
     public double getGridAltitude(int x, int z) {
-        return myAltitude[x][z];
+        return myGridAltitude[x][z];
     }
 
     /**
@@ -79,10 +81,55 @@ public class Terrain {
             double quadZ = z - Math.floor(z);
             int gridX = (int) Math.floor(x);
             int gridZ = (int) Math.floor(z);
-            altitude = 0;
+            Direction direction;
+            if (quadZ <= quadX) {
+                if (quadZ <= 0.5 - quadX) {
+                    direction = Direction.SOUTH;
+                } else {
+                    direction = Direction.EAST;
+                }
+            } else {
+                if (quadZ <= 0.5 - quadX) {
+                    direction = Direction.WEST;
+                } else {
+                    direction = Direction.NORTH;
+                }
+            }
+            altitude = quadQuarterAltitude(gridX, gridZ, quadX, quadZ, direction);
         } else {
             altitude = 0;
         }
+        return altitude;
+    }
+
+    private static double[][] centreAltitudes(Dimension dimensions, double[][] gridAltitudes) {
+        int maxQuadX = dimensions.width - 1;
+        int maxQuadZ = dimensions.height - 1;
+        double[][] centreAltitudes = new double[maxQuadX][maxQuadZ];
+        for (int x = 0; x < maxQuadX; x++) {
+            for (int z = 0; z < maxQuadZ; z++) {
+                double centreAltitude = 0;
+                for (Direction direction : Direction.values()) {
+                    int cornerX = x + direction.quadCorners[0][0];
+                    int cornerZ = z + direction.quadCorners[0][1];
+                    centreAltitude += gridAltitudes[cornerX][cornerZ];
+                }
+                centreAltitude /= Direction.values().length;
+                centreAltitudes[x][z] = centreAltitude;
+            }
+        }
+        return centreAltitudes;
+    }
+
+    private double quadQuarterAltitude(
+            int gridX,
+            int gridZ,
+            double intraQuadX,
+            double intraQuadZ,
+            Direction direction) {
+        double altitude = 0;
+
+
         return altitude;
     }
 
