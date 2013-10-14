@@ -24,9 +24,8 @@ public class GameView implements GLEventListener {
     private TerrainDrawer terrainDrawer;
 
     private static final double[] BACKGROUND_COLOR = new double[]{0, 0, 0, 1};
-    private static final float[] SUNLIGHT_DIFFUSE_COLOR = new float[]{1f, 1f, 1f, 1f};
-    private static final float[] SUNLIGHT_AMBIENT_COLOR = new float[]{0.2f, 0.2f, 0.2f, 1f};
-    private static final float[] TERRAIN_COLOR = new float[]{0, 1, 0, 1};
+    private static final float[] SUNLIGHT_DIFFUSE_COLOR = new float[]{1f, 1f, 1f, 1};
+    private static final float[] SUNLIGHT_AMBIENT_COLOR = new float[]{0.1f, 0.1f, 0.1f, 1};
 
     public GameView(GameModel gameModel) {
         this.gameModel = gameModel;
@@ -82,7 +81,8 @@ public class GameView implements GLEventListener {
         gl.glPushMatrix(); {
             gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, getSunlightPosition(), 0);
             DrawUtil.drawAxes(gl);
-            //terrainDrawer.drawTerrain(gl, TERRAIN_COLOR);
+            drawSunlight(gl);
+            terrainDrawer.drawTerrain(gl);
             gl.glTranslated(2, 1, 0);
             gl.glRotated(60, 0, 1, 1);
             GLUT glut = new GLUT();
@@ -97,5 +97,15 @@ public class GameView implements GLEventListener {
             sunlight[i] *= -1;
         }
         return sunlight;
+    }
+
+    private static final float[] YELLOW = new float[]{1, 1, 0, 1};
+    private void drawSunlight(GL2 gl) {
+        gl.glLineWidth(3);
+        gl.glBegin(GL2.GL_LINES); {
+            gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, YELLOW, 0);
+            gl.glVertex3d(0, 0, 0);
+            gl.glVertex3fv(getSunlightPosition(), 0);
+        } gl.glEnd();
     }
 }

@@ -14,7 +14,7 @@ import javax.media.opengl.glu.GLU;
  * To change this template use File | Settings | File Templates.
  */
 public class Camera {
-    private float[] backgroundColor = new float[]{1, 0, 0, 0};
+    private float[] backgroundColor = new float[]{0.3f, 0.3f, 0.4f, 1};
     private double[] position;
     private double[] lookDirection;
     private double[] lookingAt;

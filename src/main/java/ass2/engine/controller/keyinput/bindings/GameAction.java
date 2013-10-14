@@ -42,12 +42,27 @@ public enum GameAction {
         public void doActionOn(GameModel gameModel, double dt) {
             gameModel.moveForward(-dt);
         }
+    },
+
+    JUMP(MyKeyStroke.SPACE) {
+        @Override
+        public void doActionOn(GameModel gameModel, double dt) {
+            gameModel.jump(dt);
+        }
+    },
+
+    DROP(MyKeyStroke.V, MyKeyStroke.SHIFT) {
+        @Override
+        public void doActionOn(GameModel gameModel, double dt) {
+            gameModel.jump(-dt);
+        }
     };
 
     private Set<MyKeyStroke> triggeringKeyStrokes;
 
-    private GameAction(MyKeyStroke... triggeringKeyStrokes) {
+    private GameAction(MyKeyStroke triggeringKeyStroke, MyKeyStroke... triggeringKeyStrokes) {
         this.triggeringKeyStrokes = new HashSet<MyKeyStroke>();
+        this.triggeringKeyStrokes.add(triggeringKeyStroke);
         Collections.addAll(this.triggeringKeyStrokes, triggeringKeyStrokes);
     }
 

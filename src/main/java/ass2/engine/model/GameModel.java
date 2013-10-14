@@ -11,13 +11,14 @@ import ass2.util.Util;
  */
 public class GameModel {
 
-    private static final double HEIGHT_ABOVE_TERRAIN = 1;
+    private static final double DEFAULT_HEIGHT_ABOVE_TERRAIN = 1;
     private static final double ROTATION_SPEED = 90;
     private static final double MOVEMENT_SPEED = 2;
 
     private Terrain terrain;
     private double[] player2DPosition = new double[]{0, 0};
     private double[] playerLookDirection = new double[]{1, 0, 0};
+    private double playerHeightAboveTerrain = DEFAULT_HEIGHT_ABOVE_TERRAIN;
 
     public GameModel(Terrain terrain) {
         this.terrain = terrain;
@@ -41,10 +42,14 @@ public class GameModel {
         translatePlayer2DPosition(playerLookDirection[0] * dDistance, playerLookDirection[2] * dDistance);
     }
 
+    public void jump(double dt) {
+        playerHeightAboveTerrain += dt * MOVEMENT_SPEED;
+    }
+
     public double[] getPlayer3DPosition() {
         return new double[] {
                 player2DPosition[0],
-                HEIGHT_ABOVE_TERRAIN + terrain.altitude(player2DPosition[0], player2DPosition[1]),
+                playerHeightAboveTerrain + terrain.altitude(player2DPosition[0], player2DPosition[1]),
                 player2DPosition[1]
         };
     }

@@ -1,5 +1,6 @@
 package ass2.engine.controller.keyinput.mykeystroke;
 
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 /**
@@ -15,6 +16,12 @@ public enum MyKeyStroke {
     LEFT(KeyEvent.VK_LEFT),
     RIGHT(KeyEvent.VK_RIGHT),
 
+    SPACE(KeyEvent.VK_SPACE),
+
+    SHIFT(KeyEvent.VK_SHIFT, InputEvent.SHIFT_DOWN_MASK),
+
+    V(KeyEvent.VK_V),
+
     W(KeyEvent.VK_W),
     A(KeyEvent.VK_A),
     S(KeyEvent.VK_S),
@@ -22,6 +29,11 @@ public enum MyKeyStroke {
 
     private MyKeyStroke(int keyEventCode) {
         PRESSED = javax.swing.KeyStroke.getKeyStroke(keyEventCode, 0, false);
+        RELEASED = javax.swing.KeyStroke.getKeyStroke(keyEventCode, 0, true);;
+    }
+
+    private MyKeyStroke(int keyEventCode, int modifiers) {
+        PRESSED = javax.swing.KeyStroke.getKeyStroke(keyEventCode, modifiers, false);
         RELEASED = javax.swing.KeyStroke.getKeyStroke(keyEventCode, 0, true);
     }
 
