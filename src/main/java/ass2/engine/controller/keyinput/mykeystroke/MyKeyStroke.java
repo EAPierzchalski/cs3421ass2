@@ -29,7 +29,7 @@ public enum MyKeyStroke {
 
     private MyKeyStroke(int keyEventCode) {
         PRESSED = javax.swing.KeyStroke.getKeyStroke(keyEventCode, 0, false);
-        RELEASED = javax.swing.KeyStroke.getKeyStroke(keyEventCode, 0, true);;
+        RELEASED = javax.swing.KeyStroke.getKeyStroke(keyEventCode, 0, true);
     }
 
     private MyKeyStroke(int keyEventCode, int modifiers) {
