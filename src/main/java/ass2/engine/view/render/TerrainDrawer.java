@@ -148,7 +148,6 @@ public class TerrainDrawer {
     //private static final float[] GREY = new float[]{0.5f, 0.5f, 0.5f, 1};
     public void drawTerrain(GL2 gl) {
         gl.glPushMatrix(); {
-            gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
             for (int faceIndex = 0; faceIndex < faceVertices.length; faceIndex ++) {
                 DrawUtil.drawPolygon3d(gl, faceVertices[faceIndex], faceNormals[faceIndex], TERRAIN_COLOR);
 

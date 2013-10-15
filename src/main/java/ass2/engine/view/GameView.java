@@ -58,7 +58,6 @@ public class GameView implements GLEventListener {
         GL2 gl = glAutoDrawable.getGL().getGL2();
         updateCamera();
         camera.setView(gl);
-        Mouse.theMouse.update(gl);
         draw(gl);
     }
 

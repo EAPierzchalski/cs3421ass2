@@ -74,28 +74,28 @@ public class Terrain {
      */
     public double altitude(double x, double z) {
         double altitude;
-        double maxX = mySize.getHeight();
-        double maxZ = mySize.getWidth();
-        if (0 <= x && x < maxX && 0 <= z && z < maxZ) {
-            double quadX = x - Math.floor(x);
-            double quadZ = z - Math.floor(z);
-            int gridX = (int) Math.floor(x);
-            int gridZ = (int) Math.floor(z);
+        double maxQuadX = mySize.width - 1;
+        double maxQuadZ = mySize.height - 1;
+        int gridX = (int) Math.floor(x);
+        int gridZ = (int) Math.floor(z);
+        if (0 <= gridX && gridX <= maxQuadX && 0 <= gridZ && gridZ <= maxQuadZ) {
+            double intraQuadX = x - Math.floor(x);
+            double intraQuadZ = z - Math.floor(z);
             Direction direction;
-            if (quadZ <= quadX) {
-                if (quadZ <= 0.5 - quadX) {
+            if (intraQuadZ <= intraQuadX) {
+                if (intraQuadZ <= 0.5 - intraQuadX) {
                     direction = Direction.SOUTH;
                 } else {
                     direction = Direction.EAST;
                 }
             } else {
-                if (quadZ <= 0.5 - quadX) {
+                if (intraQuadZ <= 0.5 - intraQuadX) {
                     direction = Direction.WEST;
                 } else {
                     direction = Direction.NORTH;
                 }
             }
-            altitude = quadQuarterAltitude(gridX, gridZ, quadX, quadZ, direction);
+            altitude = quadQuarterAltitude(gridX, gridZ, intraQuadX, intraQuadZ, direction);
         } else {
             altitude = 0;
         }
@@ -129,6 +129,7 @@ public class Terrain {
             Direction direction) {
         double altitude = 0;
 
+        //System.out.println(direction);
 
         return altitude;
     }

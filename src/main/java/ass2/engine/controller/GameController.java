@@ -3,9 +3,13 @@ package ass2.engine.controller;
 import ass2.engine.controller.keyinput.KeyBinder;
 import ass2.engine.model.GameModel;
 
+import javax.media.opengl.GL2;
+import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.GLEventListener;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 /**
  * User: Pierzchalski
@@ -13,19 +17,12 @@ import java.awt.event.ActionListener;
  * Package: ass2.engine
  * Project: cs3421ass2
  */
-public class GameController implements ActionListener {
-    private GameModel gameModel;
+public class GameController implements GLEventListener {
     private KeyBinder keyBinder;
-    private Timer timer;
     private long myTime;
 
-    private static final int MILLIS_PER_TICK = 20;
-
     public GameController(GameModel gameModel) {
-        this.gameModel = gameModel;
         this.keyBinder = new KeyBinder(gameModel);
-        this.timer = new Timer(MILLIS_PER_TICK, this);
-        this.myTime = System.currentTimeMillis();
     }
 
     public void bindToPanel(JComponent jComponent) {
@@ -34,16 +31,30 @@ public class GameController implements ActionListener {
         keyBinder.bindToPanel(jComponent);
     }
 
-    public void start() {
-        timer.start();
+    @Override
+    public void init(GLAutoDrawable drawable) {
+        this.myTime = System.currentTimeMillis();
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void dispose(GLAutoDrawable drawable) {
+        //Does nothing
+    }
+
+    @Override
+    public void display(GLAutoDrawable drawable) {
+        GL2 gl = drawable.getGL().getGL2();
         long newTime = System.currentTimeMillis();
         double dt = (newTime - myTime) / 1000.0;
         myTime = newTime;
         keyBinder.update(dt);
+        Mouse.theMouse.update(gl);
+        System.out.println(Arrays.toString(Mouse.theMouse.getPosition()));
+    }
+
+    @Override
+    public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
+        GL2 gl = drawable.getGL().getGL2();
+        Mouse.theMouse.reshape(gl);
     }
 }

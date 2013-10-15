@@ -42,8 +42,6 @@ public class Mouse extends MouseAdapter {
         myViewport = new int[4];
         myProjectionMatrix = new double[16];
         myMVMatrix = new double[16];
-        
-        myMouse = null;
 
         myPressed = new boolean[3];
         myReleased = new boolean[3];
