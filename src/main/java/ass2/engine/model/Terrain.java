@@ -2,6 +2,7 @@ package ass2.engine.model;
 
 import ass2.util.Tuple2;
 import ass2.util.Util;
+import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -74,28 +75,41 @@ public class Terrain {
      */
     public double altitude(double x, double z) {
         double altitude;
-        double maxQuadX = mySize.width - 1;
-        double maxQuadZ = mySize.height - 1;
         int gridX = (int) Math.floor(x);
         int gridZ = (int) Math.floor(z);
-        if (0 <= gridX && gridX <= maxQuadX && 0 <= gridZ && gridZ <= maxQuadZ) {
+        if (0 <= gridX && gridX < mySize.width - 1 && 0 <= gridZ && gridZ < mySize.height - 1) {
+
+            Direction direction = quadQuarter(x, z);
+
+            double[][] cornerAltitudes = new double[2][2];
+
+            int quadCornerX = direction.quadCorners[0][0];
+            int quadCornerZ = direction.quadCorners[0][1];
+            int gridCornerX = gridX + quadCornerX;
+            int gridCornerZ = gridZ + quadCornerZ;
+            cornerAltitudes[quadCornerX][quadCornerZ] = myGridAltitude[gridCornerX][gridCornerZ];
+
+            quadCornerX = direction.quadCorners[1][0];
+            quadCornerZ = direction.quadCorners[1][1];
+            gridCornerX = gridX + quadCornerX;
+            gridCornerZ = gridZ + quadCornerZ;
+            cornerAltitudes[quadCornerX][quadCornerZ] = myGridAltitude[gridCornerX][gridCornerZ];
+
+            double altitudeAtCentre = myCentreAltitude[gridX][gridZ];
+
+            /**
+             * We use the change in altitude to determine the values at all four corners of the quad,
+             * as though it were a rectangle with the same planar normal as that of the triangle.
+             */
+            switch (direction) {
+                case NORTH:
+
+            }
+
             double intraQuadX = x - Math.floor(x);
             double intraQuadZ = z - Math.floor(z);
-            Direction direction;
-            if (intraQuadZ <= intraQuadX) {
-                if (intraQuadZ <= 0.5 - intraQuadX) {
-                    direction = Direction.SOUTH;
-                } else {
-                    direction = Direction.EAST;
-                }
-            } else {
-                if (intraQuadZ <= 0.5 - intraQuadX) {
-                    direction = Direction.WEST;
-                } else {
-                    direction = Direction.NORTH;
-                }
-            }
-            altitude = quadQuarterAltitude(gridX, gridZ, intraQuadX, intraQuadZ, direction);
+
+
         } else {
             altitude = 0;
         }
@@ -119,6 +133,42 @@ public class Terrain {
             }
         }
         return centreAltitudes;
+    }
+
+    /***
+     * Returns the bilinear interpolation at x, z in a unit square with corner values given as arguments.
+     * @param x0z0
+     * @param x1z0
+     * @param x0z1
+     * @param x1z1
+     * @param x
+     * @param z
+     * @return
+     */
+    private double bilinear(double x0z0, double x1z0, double x0z1, double x1z1, double x, double z) {
+        double lerpX0 = (1 - x) * x0z0 + x * x1z0;
+        double lerpX1 = (1 - x) * x0z1 + x * x1z1;
+        return (1 - z) * lerpX0 + z * lerpX1;
+    }
+
+    private Direction quadQuarter(double x, double z) {
+        double intraQuadX = x - Math.floor(x);
+        double intraQuadZ = z - Math.floor(z);
+        Direction direction;
+        if (intraQuadZ >= intraQuadX) {
+            if (intraQuadZ >= 1 - intraQuadX) {
+                direction = Direction.NORTH;
+            } else {
+                direction = Direction.WEST;
+            }
+        } else {
+            if (intraQuadZ >= 1 - intraQuadX) {
+                direction = Direction.EAST;
+            } else {
+                direction = Direction.SOUTH;
+            }
+        }
+        return direction;
     }
 
     private double quadQuarterAltitude(

@@ -2,13 +2,9 @@ package ass2.engine.view;
 
 import ass2.engine.model.GameModel;
 import ass2.engine.view.render.DrawUtil;
-import ass2.engine.view.render.TerrainDrawer;
-import ass2.engine.view.textures.Texture;
+import ass2.engine.view.render.terrainDrawer.TerrainDrawer;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLEventListener;
+import javax.media.opengl.*;
 
 /**
  * User: Pierzchalski
@@ -25,9 +21,6 @@ public class GameView implements GLEventListener {
     private static final double[] BACKGROUND_COLOR = new double[]{0, 0, 0, 1};
     private static final float[] SUNLIGHT_DIFFUSE_COLOR = new float[]{1f, 1f, 1f, 1};
     private static final float[] SUNLIGHT_AMBIENT_COLOR = new float[]{0.1f, 0.1f, 0.1f, 1};
-
-    private static final String TERRAIN_TEXTURE_FILE_SRC = "src/main/resources//textures/BlueGreenBrick.png";
-    private static final String TERRAIN_TEXTURE_FILE_TYPE = "png";
 
     public GameView(GameModel gameModel) {
         this.gameModel = gameModel;
@@ -50,8 +43,9 @@ public class GameView implements GLEventListener {
 
         gl.glShadeModel(GL2.GL_SMOOTH);
 
-        Texture terrainTexture = new Texture(gl, TERRAIN_TEXTURE_FILE_SRC, TERRAIN_TEXTURE_FILE_TYPE);
-        terrainDrawer.setTerrainTexture(terrainTexture);
+        gl.glEnable(GL2.GL_TEXTURE_2D);
+
+        terrainDrawer.init(gl);
     }
 
     @Override
@@ -83,7 +77,7 @@ public class GameView implements GLEventListener {
         gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
         gl.glPushMatrix(); {
             gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, getSunlightPositionFloat(), 0);
-            //DrawUtil.drawAxes(gl);
+            DrawUtil.drawAxes(gl);
             //drawSunlight(gl);
             terrainDrawer.drawTerrain(gl);
         } gl.glPopMatrix();

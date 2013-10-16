@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class Texture {
 	
-	public static final boolean TEXTURE_MIPMAP_EANBLED = true; 
+	public static final boolean TEXTURE_MIPMAP_EANBLED = true;
 	int[] textureID = new int[1];
 	
 	public Texture(GLProfile glp, GL2 gl, String filename, String fileType) {
@@ -64,10 +64,6 @@ public class Texture {
 	        				data.getBuffer());
 		}
         
-	}
-	
-	public Texture(GL2 gl, String filename, String fileType) {
-		this(GLProfile.getDefault(), gl, filename, fileType);
 	}
 	
 	public int getTextureID() {
