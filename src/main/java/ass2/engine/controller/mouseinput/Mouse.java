@@ -1,4 +1,6 @@
-package ass2.engine.controller;
+package ass2.engine.controller.mouseinput;
+
+import ass2.engine.model.GameModel;
 
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
@@ -25,7 +27,6 @@ import java.awt.event.MouseEvent;
  */
 public class Mouse extends MouseAdapter {
 
-    public static final Mouse theMouse = new Mouse();
     private int[] myViewport;
     private double[] myProjectionMatrix;
     private double[] myMVMatrix;
@@ -37,7 +38,9 @@ public class Mouse extends MouseAdapter {
     private boolean[] myWasPressed;
     private boolean[] myWasReleased;
 
-    private Mouse() {
+    private GameModel gameModel;
+
+    public Mouse(GameModel gameModel) {
         myMouse = null;
         myViewport = new int[4];
         myProjectionMatrix = new double[16];
@@ -46,7 +49,9 @@ public class Mouse extends MouseAdapter {
         myPressed = new boolean[3];
         myReleased = new boolean[3];
         myWasPressed = new boolean[3];
-        myWasReleased = new boolean[3];        
+        myWasReleased = new boolean[3];
+
+        this.gameModel = gameModel;
     }
 
     /**

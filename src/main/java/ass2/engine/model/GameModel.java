@@ -62,6 +62,10 @@ public class GameModel {
         this.playerLookDirection = Util.normalize(playerLookDirection);
     }
 
+    public void translatePlayerLookDirection(double[] translation) {
+        this.playerLookDirection = Util.normalize(Util.sum(this.playerLookDirection, translation));
+    }
+
     public void rotatePlayerLookDirection(double dt) {
         double radians = Math.toRadians(dt * ROTATION_SPEED);
         double s = Math.sin(radians);

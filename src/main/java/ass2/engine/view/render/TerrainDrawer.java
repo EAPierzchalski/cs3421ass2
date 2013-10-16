@@ -2,6 +2,7 @@ package ass2.engine.view.render;
 
 import ass2.engine.model.Direction;
 import ass2.engine.model.Terrain;
+import ass2.engine.view.textures.Texture;
 import ass2.util.Util;
 
 import javax.media.opengl.GL2;
@@ -18,6 +19,9 @@ public class TerrainDrawer {
 
     private double[][][] faceVertices;
     private double[][] faceNormals;
+    private double[][][] faceTextureCoords;
+
+    private Texture terrainTexture;
 
     public TerrainDrawer(Terrain terrain) {
 
@@ -46,6 +50,7 @@ public class TerrainDrawer {
         int numFaces = numQuads * Direction.values().length;
         this.faceVertices = new double[numFaces][VERTICES_PER_QUAD_QUARTER][];
         this.faceNormals = new double[numFaces][];
+        this.faceTextureCoords = new double[numFaces][][];
 
         int faceIndex = 0;
         for (int quadX = 0; quadX < maxQuadX; quadX++) {
@@ -63,11 +68,17 @@ public class TerrainDrawer {
 
                     this.faceNormals[faceIndex] = terrainQuadQuarterNormals[quadX][quadZ][direction.ordinal()];
 
+                    this.faceTextureCoords[faceIndex] = textureCoords(quadX, quadZ, direction);
+
                     faceIndex++;
                 }
             }
         }
 
+    }
+
+    public void setTerrainTexture(Texture terrainTexture) {
+        this.terrainTexture = terrainTexture;
     }
 
     private static double[][][][] quadQuarterNormals(
@@ -86,6 +97,14 @@ public class TerrainDrawer {
             }
         }
         return quarterNormals;
+    }
+
+    private static double[][] textureCoords(int quadX, int quadZ, Direction direction) {
+        return new double[][] {
+                {0.5, 0.5},
+                {direction.quadCorners[0][0], direction.quadCorners[0][1]},
+                {direction.quadCorners[1][0], direction.quadCorners[1][1]}
+        };
     }
 
     private static double[][][] gridVertices(Terrain terrain) {
@@ -149,7 +168,13 @@ public class TerrainDrawer {
     public void drawTerrain(GL2 gl) {
         gl.glPushMatrix(); {
             for (int faceIndex = 0; faceIndex < faceVertices.length; faceIndex ++) {
-                DrawUtil.drawPolygon3d(gl, faceVertices[faceIndex], faceNormals[faceIndex], TERRAIN_COLOR);
+                DrawUtil.drawPolygon3d(
+                        gl,
+                        faceVertices[faceIndex],
+                        faceNormals[faceIndex],
+                        terrainTexture,
+                        faceTextureCoords[faceIndex],
+                        TERRAIN_COLOR);
 
                 /*double[] faceCentroid = new double[] {0, 0, 0};
                 for (double[] vertex: faceVertices[faceIndex]) {

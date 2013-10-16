@@ -1,5 +1,7 @@
 package ass2.engine.view.render;
 
+import ass2.engine.view.textures.Texture;
+
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
@@ -10,13 +12,25 @@ import javax.media.opengl.GL2;
  * Project: cs3421ass2
  */
 public class DrawUtil {
-    public static void drawPolygon3d(GL2 gl, double[][] vertices, double[] normal, float[] color) {
+    public static void drawPolygon3d(
+            GL2 gl,
+            double[][] vertices,
+            double[] normal,
+            Texture texture,
+            double[][] textureCoords,
+            float[] color) {
+        gl.glBindTexture(GL.GL_TEXTURE_2D, texture.getTextureID());
+        // use the texture to modulate diffuse and ambient lighting
+        gl.glTexEnvf(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, GL2.GL_MODULATE);
         gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2.GL_FILL);
         gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, color, 0);
         gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, color, 0);
         gl.glBegin(GL2.GL_POLYGON); {
-            for (double[] vertex : vertices) {
+            for (int i = 0; i < vertices.length; i++) {
+                double[] vertex = vertices[i];
+                double[] texCoords = textureCoords[i];
                 gl.glNormal3dv(normal, 0);
+                gl.glTexCoord2dv(texCoords, 0);
                 gl.glVertex3dv(vertex, 0);
             }
         } gl.glEnd();

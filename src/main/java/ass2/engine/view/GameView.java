@@ -1,9 +1,9 @@
 package ass2.engine.view;
 
-import ass2.engine.controller.Mouse;
 import ass2.engine.model.GameModel;
 import ass2.engine.view.render.DrawUtil;
 import ass2.engine.view.render.TerrainDrawer;
+import ass2.engine.view.textures.Texture;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
@@ -26,6 +26,9 @@ public class GameView implements GLEventListener {
     private static final float[] SUNLIGHT_DIFFUSE_COLOR = new float[]{1f, 1f, 1f, 1};
     private static final float[] SUNLIGHT_AMBIENT_COLOR = new float[]{0.1f, 0.1f, 0.1f, 1};
 
+    private static final String TERRAIN_TEXTURE_FILE_SRC = "src/main/resources//textures/BlueGreenBrick.png";
+    private static final String TERRAIN_TEXTURE_FILE_TYPE = "png";
+
     public GameView(GameModel gameModel) {
         this.gameModel = gameModel;
         this.camera = new Camera(gameModel.getPlayer3DPosition(), gameModel.getPlayerLookDirection());
@@ -46,6 +49,9 @@ public class GameView implements GLEventListener {
         gl.glEnable(GL2.GL_NORMALIZE);
 
         gl.glShadeModel(GL2.GL_SMOOTH);
+
+        Texture terrainTexture = new Texture(gl, TERRAIN_TEXTURE_FILE_SRC, TERRAIN_TEXTURE_FILE_TYPE);
+        terrainDrawer.setTerrainTexture(terrainTexture);
     }
 
     @Override
@@ -70,7 +76,6 @@ public class GameView implements GLEventListener {
     public void reshape(GLAutoDrawable glAutoDrawable, int x, int y, int width, int height) {
         GL2 gl = glAutoDrawable.getGL().getGL2();
         camera.reshape(gl, x, y, width, height);
-        Mouse.theMouse.reshape(gl);
     }
 
     private void draw(GL2 gl) {
