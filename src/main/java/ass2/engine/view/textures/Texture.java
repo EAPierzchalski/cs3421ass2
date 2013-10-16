@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class Texture {
 	
-	public static final boolean TEXTURE_MIPMAP_EANBLED = true;
+	public static final boolean TEXTURE_MIPMAP_ENABLED = true;
 	int[] textureID = new int[1];
 	
 	public Texture(GLProfile glp, GL2 gl, String filename, String fileType) {
@@ -34,10 +34,10 @@ public class Texture {
 		gl.glBindTexture(GL.GL_TEXTURE_2D, getTextureID());
 
 		// Build the texture from data.
-		if (TEXTURE_MIPMAP_EANBLED) {
+		if (TEXTURE_MIPMAP_ENABLED) {
 			// Set texture parameters to enable automatic mipmap generation and bilinear filtering.
 			gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
-	        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR_MIPMAP_NEAREST);
+	        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR_MIPMAP_LINEAR);
 	        
 	        // Now build the texture (and generate mipmaps).
 	        GLU glu = new GLUgl2();

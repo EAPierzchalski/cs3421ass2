@@ -2,7 +2,6 @@ package ass2.engine.model;
 
 import ass2.util.Tuple2;
 import ass2.util.Util;
-import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -101,15 +100,47 @@ public class Terrain {
              * We use the change in altitude to determine the values at all four corners of the quad,
              * as though it were a rectangle with the same planar normal as that of the triangle.
              */
+            Direction opposite;
             switch (direction) {
                 case NORTH:
-
+                    opposite = Direction.SOUTH;
+                    break;
+                case EAST:
+                    opposite = Direction.WEST;
+                    break;
+                case SOUTH:
+                    opposite = Direction.NORTH;
+                    break;
+                case WEST:
+                    opposite = Direction.EAST;
+                    break;
+                default:
+                    opposite = Direction.NORTH;
+                    break;
             }
+
+            quadCornerX = opposite.quadCorners[0][0];
+            quadCornerZ = opposite.quadCorners[0][1];
+            gridCornerX = gridX + quadCornerX;
+            gridCornerZ = gridZ + quadCornerZ;
+            cornerAltitudes[quadCornerX][quadCornerZ] = myGridAltitude[gridCornerX][gridCornerZ];
+
+            quadCornerX = opposite.quadCorners[1][0];
+            quadCornerZ = opposite.quadCorners[1][1];
+            gridCornerX = gridX + quadCornerX;
+            gridCornerZ = gridZ + quadCornerZ;
+            cornerAltitudes[quadCornerX][quadCornerZ] = myGridAltitude[gridCornerX][gridCornerZ];
 
             double intraQuadX = x - Math.floor(x);
             double intraQuadZ = z - Math.floor(z);
-
-
+            altitude = bilinear(
+                    cornerAltitudes[0][0],
+                    cornerAltitudes[1][0],
+                    cornerAltitudes[0][1],
+                    cornerAltitudes[1][1],
+                    intraQuadX,
+                    intraQuadZ
+            );
         } else {
             altitude = 0;
         }
@@ -169,19 +200,6 @@ public class Terrain {
             }
         }
         return direction;
-    }
-
-    private double quadQuarterAltitude(
-            int gridX,
-            int gridZ,
-            double intraQuadX,
-            double intraQuadZ,
-            Direction direction) {
-        double altitude = 0;
-
-        //System.out.println(direction);
-
-        return altitude;
     }
 
     private List<Tree> treesFrom2DPositions(List<Tuple2<Double, Double>> treePositions) {
