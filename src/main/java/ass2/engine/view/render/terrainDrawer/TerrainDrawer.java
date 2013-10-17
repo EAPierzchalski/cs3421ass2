@@ -3,10 +3,10 @@ package ass2.engine.view.render.terrainDrawer;
 import ass2.engine.model.Direction;
 import ass2.engine.model.Terrain;
 import ass2.engine.view.render.DrawUtil;
+import ass2.engine.view.shaders.Program;
 import ass2.engine.view.shaders.Shader;
 import ass2.engine.view.textures.Texture;
 
-import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLProfile;
 import java.io.File;
@@ -29,11 +29,13 @@ public class TerrainDrawer {
 
     private Shader vertexShader = new Shader(GL2.GL_VERTEX_SHADER, new File(VERTEX_SHADER_SRC));
     private Shader fragmentShader = new Shader(GL2.GL_FRAGMENT_SHADER, new File(FRAGMENT_SHADER_SRC));
+    private Program shaderProgram;
 
     private static final String TERRAIN_TEXTURE_FILE_SRC = "src/main/resources/textures/BlueGreenBrick.png";
     private static final String TERRAIN_TEXTURE_FILE_TYPE = "png";
 
     private Texture terrainTexture;
+    private Texture treeTexture;
 
     public TerrainDrawer(Terrain terrain) {
 
@@ -88,9 +90,11 @@ public class TerrainDrawer {
                 TERRAIN_TEXTURE_FILE_TYPE);
         this.vertexShader.compile(gl);
         this.fragmentShader.compile(gl);
+        this.shaderProgram = new Program(gl, vertexShader, fragmentShader);
     }
 
     public void drawTerrain(GL2 gl) {
+        gl.glUseProgram(shaderProgram.getMyID());
         gl.glPushMatrix(); {
             for (int faceIndex = 0; faceIndex < faceVertices.length; faceIndex ++) {
                 DrawUtil.drawPolygon3d(
@@ -99,18 +103,6 @@ public class TerrainDrawer {
                         faceVertices[faceIndex],
                         faceNormals[faceIndex],
                         faceTextureCoords[faceIndex]);
-
-                /*double[] faceCentroid = new double[] {0, 0, 0};
-                for (double[] vertex: faceVertices[faceIndex]) {
-                    faceCentroid = Util.sum(faceCentroid, vertex);
-                }
-                faceCentroid = Util.scale(faceCentroid, 1.0/faceVertices[faceIndex].length);
-
-                DrawUtil.drawLine(
-                        gl,
-                        faceCentroid,
-                        Util.sum(faceCentroid, faceNormals[faceIndex]),
-                        GREY);*/
             }
         } gl.glPopMatrix();
     }
