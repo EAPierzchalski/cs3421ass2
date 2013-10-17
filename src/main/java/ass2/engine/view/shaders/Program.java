@@ -13,23 +13,34 @@ import javax.media.opengl.GL2ES2;
 public class Program {
     private int myID;
 
+    private static final int MAX_PROGRAM_LOG_LENGTH = 1000;
     public Program(GL2 gl, Shader shader, Shader... shaders) {
         myID = gl.glCreateProgram();
         gl.glAttachShader(myID, shader.getID());
-        for (Shader s: shaders) {
+        for (Shader s : shaders) {
             gl.glAttachShader(myID, s.getID());
         }
         gl.glLinkProgram(myID);
+
         int[] param = new int[1];
         gl.glGetProgramiv(myID, GL2ES2.GL_LINK_STATUS, param, 0);
         if (param[0] != GL.GL_TRUE) {
-            byte[] charArray = new byte[GL2.GL_MAX_DEBUG_MESSAGE_LENGTH];
-            gl.glGetProgramInfoLog(myID, );
-            System.out.println("failed to link program");
+            byte[] charArray = new byte[MAX_PROGRAM_LOG_LENGTH];
+            int[] paramValue = new int[1];
+            gl.glGetProgramInfoLog(myID, charArray.length, paramValue, 0, charArray, 0);
+            throw new LinkingException(new String(charArray));
         }
     }
 
     public int getMyID() {
         return myID;
+    }
+
+    static public class LinkingException extends RuntimeException {
+
+        public LinkingException(String message) {
+            super(message);
+        }
+
     }
 }

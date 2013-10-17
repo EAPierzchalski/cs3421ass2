@@ -31,6 +31,7 @@ public class Shader {
 
             for (String line = in.readLine(); line != null; line = in.readLine()) {
                 sb.append(line);
+                sb.append("\n");
             }
 
             mySource = new String[1];
@@ -68,6 +69,6 @@ public class Shader {
                     + new String(log));
         }
 
-        gl.glLinkProgram(myID);
+        //gl.glLinkProgram(myID);
     }
 }
