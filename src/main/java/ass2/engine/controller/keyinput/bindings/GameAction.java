@@ -63,7 +63,16 @@ public enum GameAction {
             sourceBinder.cancelGameAction(JUMP);
             gameModel.jump(-dt);
         }
-    };
+    },
+
+    TOGGLE_SHADERS(MyKeyStroke.Z) {
+        @Override
+        public void doActionOn(GameModel gameModel, double dt, KeyBinder sourceBinder) {
+            gameModel.toggleUseShaders();
+            sourceBinder.cancelGameAction(TOGGLE_SHADERS);
+        }
+    }
+    ;
 
     private Set<MyKeyStroke> triggeringKeyStrokes;
 

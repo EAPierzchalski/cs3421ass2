@@ -20,6 +20,8 @@ public class GameModel {
     private double[] playerLookDirection = new double[]{1, 0, 0};
     private double playerHeightAboveTerrain = DEFAULT_HEIGHT_ABOVE_TERRAIN;
 
+    private boolean useShaders = false;
+
     public GameModel(Terrain terrain) {
         this.terrain = terrain;
     }
@@ -64,6 +66,14 @@ public class GameModel {
 
     public void translatePlayerLookDirection(double[] translation) {
         this.playerLookDirection = Util.normalize(Util.sum(this.playerLookDirection, translation));
+    }
+
+    public void toggleUseShaders() {
+        useShaders = !useShaders;
+    }
+
+    public boolean useShaders() {
+        return useShaders;
     }
 
     public void rotatePlayerLookDirection(double dt) {

@@ -93,8 +93,12 @@ public class TerrainDrawer {
         this.shaderProgram = new Program(gl, vertexShader, fragmentShader);
     }
 
-    public void drawTerrain(GL2 gl) {
-        gl.glUseProgram(shaderProgram.getMyID());
+    public void drawTerrain(GL2 gl, boolean useShaders) {
+        if (useShaders) {
+            gl.glUseProgram(shaderProgram.getMyID());
+        } else {
+            gl.glUseProgram(0);
+        }
         gl.glPushMatrix(); {
             for (int faceIndex = 0; faceIndex < faceVertices.length; faceIndex ++) {
                 DrawUtil.drawPolygon3d(

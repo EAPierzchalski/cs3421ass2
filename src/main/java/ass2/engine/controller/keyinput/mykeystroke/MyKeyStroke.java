@@ -21,6 +21,7 @@ public enum MyKeyStroke {
     SHIFT(KeyEvent.VK_SHIFT, InputEvent.SHIFT_DOWN_MASK),
 
     V(KeyEvent.VK_V),
+    Z(KeyEvent.VK_Z),
 
     W(KeyEvent.VK_W),
     A(KeyEvent.VK_A),
