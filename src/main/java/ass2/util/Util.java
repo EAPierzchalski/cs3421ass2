@@ -71,60 +71,12 @@ public class Util {
         return v1addV2;
     }
 
-    public static double[] scale(double[] v, double s) {
-        double[] vScaleS = new double[v.length];
-        for (int i = 0; i < vScaleS.length; i++) {
-            vScaleS[i] = v[i] * s;
+    public static double[] scale(double s, double[] v) {
+        double[] sv = new double[v.length];
+        for (int i = 0; i < v.length; i++) {
+            sv[i] = s * v[i];
         }
-        return vScaleS;
-    }
-
-    public static double[] unbox(Double[] boxedDoubles) {
-        double[] doubles = new double[boxedDoubles.length];
-        for (int i = 0; i < doubles.length; i++) {
-            doubles[i] = boxedDoubles[i];
-        }
-        return doubles;
-    }
-
-    public static double[][] uunbox(Double[][] boxedDoubles) {
-        double[][] doubles = new double[boxedDoubles.length][];
-        for (int i = 0; i < doubles.length; i++) {
-            doubles[i] = unbox(boxedDoubles[i]);
-        }
-        return doubles;
-    }
-
-    public static double[][][] unbox(Double[][][] boxedDoubles) {
-        double[][][] doubles = new double[boxedDoubles.length][][];
-        for (int i = 0; i < doubles.length; i++) {
-            doubles[i] = uunbox(boxedDoubles[i]);
-        }
-        return doubles;
-    }
-
-    public static Double[] box(double[] doubles) {
-        Double[] boxedDoubles = new Double[doubles.length];
-        for (int i = 0; i < boxedDoubles.length; i++) {
-            boxedDoubles[i] = doubles[i];
-        }
-        return boxedDoubles;
-    }
-
-    public static Double[][] box(double[][] doubles) {
-        Double[][] boxedDoubles = new Double[doubles.length][];
-        for (int i = 0; i < boxedDoubles.length; i++) {
-            boxedDoubles[i] = box(doubles[i]);
-        }
-        return boxedDoubles;
-    }
-
-    public static Double[][][] box(double[][][] doubles) {
-        Double[][][] boxedDoubles = new Double[doubles.length][][];
-        for (int i = 0; i < boxedDoubles.length; i++) {
-            boxedDoubles[i] = box(doubles[i]);
-        }
-        return boxedDoubles;
+        return sv;
     }
 
     public static double[][][] flatten(double[][][][] allDoubles) {

@@ -108,7 +108,7 @@ public class Road {
         double x2 = myPoints.get(i++);
         double y2 = myPoints.get(i++);
         double x3 = myPoints.get(i++);
-        double y3 = myPoints.get(i++);
+        double y3 = myPoints.get(i);
         
         double[] p = new double[2];
 
@@ -116,6 +116,43 @@ public class Road {
         p[1] = b(0, t) * y0 + b(1, t) * y1 + b(2, t) * y2 + b(3, t) * y3;        
         
         return p;
+    }
+
+    /***
+     * return the tangent vector to the spine at parameter t.
+     * @param t
+     * @return
+     */
+    public double[] tangent(double t) {
+        int i = (int)Math.floor(t);
+        double bezierT = t - i;
+
+        i *= 6;
+
+        double x0 = myPoints.get(i++);
+        double y0 = myPoints.get(i++);
+        double x1 = myPoints.get(i++);
+        double y1 = myPoints.get(i++);
+        double x2 = myPoints.get(i++);
+        double y2 = myPoints.get(i++);
+        double x3 = myPoints.get(i++);
+        double y3 = myPoints.get(i);
+
+        double bx0 = x1 - x0;
+        double by0 = y1 - y0;
+        double bx1 = x2 - x1;
+        double by1 = y2 - y1;
+        double bx2 = x3 - x2;
+        double by2 = y3 - y2;
+
+        double[] tangent = new double[2];
+        tangent[0] = bTangent(0, bezierT) * bx0 +
+                bTangent(1, bezierT) * bx1 +
+                bTangent(2, bezierT) * bx2;
+        tangent[1] = bTangent(0, bezierT) * by0 +
+                bTangent(1, bezierT) * by1 +
+                bTangent(2, bezierT) * by2;
+        return tangent;
     }
     
     /**
@@ -146,5 +183,27 @@ public class Road {
         throw new IllegalArgumentException("" + i);
     }
 
-
+    /***
+     * Bezier coefficients for the tangents to the curve
+     * @param p
+     * @param t
+     * @return
+     */
+    private double bTangent(int p, double t) {
+        double bezierCoeff;
+        switch (p) {
+            case 0:
+                bezierCoeff = 3 * (1 - t) * (1 - t);
+                break;
+            case 1:
+                bezierCoeff = 6 * (1 - t) * t;
+                break;
+            case 2:
+                bezierCoeff = 3 * t * t;
+                break;
+            default:
+                throw new IllegalArgumentException(String.valueOf(p));
+        }
+        return bezierCoeff;
+    }
 }

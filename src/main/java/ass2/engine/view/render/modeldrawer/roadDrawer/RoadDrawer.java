@@ -14,14 +14,18 @@ import javax.media.opengl.GL2;
  * Project: cs3421ass2
  */
 public class RoadDrawer implements ComponentDrawer {
-    private Terrain terrain;
+    private static final int NUM_ROAD_SEGMENTS = 20;
 
     private static final String ROAD_TEXTURE_FILE_SRC = "src/main/resources/textures/BrightPurpleMarble.png";
     private static final String ROAD_TEXTURE_FILE_TYPE = "png";
     private Texture roadTexture;
 
+    private double[][][][] roadFaceVertices;
+    private double[][][][] roadFaceNormals;
+    private double[][][][] roadFaceTexCoords;
+
     public RoadDrawer(Terrain terrain) {
-        this.terrain = terrain;
+
     }
 
     public void init(GL2 gl) {
@@ -35,6 +39,8 @@ public class RoadDrawer implements ComponentDrawer {
     }
 
     private void drawRoad(GL2 gl, Road road) {
-
+        double maxParameter = road.size();
+        gl.glPushMatrix(); {
+        } gl.glPopMatrix();
     }
 }

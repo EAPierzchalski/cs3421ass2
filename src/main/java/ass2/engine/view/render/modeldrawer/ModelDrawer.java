@@ -20,8 +20,8 @@ import java.util.List;
  */
 public class ModelDrawer {
     private static final String VERTEX_SHADER_SRC = "src/main/resources/shaders/vertex/simple_vertex.glsl";
-    private static final String FRAGMENT_SHADER_SRC = "src/main/resources/shaders/fragment/simple_fragment.glsl";
     private Shader vertexShader = new Shader(GL2.GL_VERTEX_SHADER, new File(VERTEX_SHADER_SRC));
+    private static final String FRAGMENT_SHADER_SRC = "src/main/resources/shaders/fragment/simple_fragment.glsl";
     private Shader fragmentShader = new Shader(GL2.GL_FRAGMENT_SHADER, new File(FRAGMENT_SHADER_SRC));
     private Program shaderProgram;
 
@@ -49,6 +49,7 @@ public class ModelDrawer {
         } else {
             gl.glUseProgram(0);
         }
+
         for (ComponentDrawer componentDrawer : componentDrawers) {
             componentDrawer.draw(gl);
         }

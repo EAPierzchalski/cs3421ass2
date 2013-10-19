@@ -18,7 +18,7 @@ public class GeometryUtil {
      * @param numVerticalSegments
      * @return a tuple containing the list of faces (a list of lists of vertices), a list of normals, and a list of texture coords.
      */
-    public static double[][][][] cylinderNoCaps(
+    private static double[][][][] cylinderNoCaps(
             double radius,
             double height,
             int numRadialSegments,
@@ -86,7 +86,7 @@ public class GeometryUtil {
         };
     }
 
-    public static double[][][][] cylinderCaps(
+    private static double[][][][] cylinderCaps(
             double radius,
             double height,
             int numRadialSegments
@@ -130,5 +130,71 @@ public class GeometryUtil {
             cylinderData[dataIndex] = Util.join(bodyData[dataIndex], capData[dataIndex]);
         }
         return cylinderData;
+    }
+
+    /***
+     * result of extruding a straight line along a spine, held constantly horizontal.
+     * @param spine an array of 3d positions of the spine
+     * @param spineTangents an array of 3d tangents to the spine, at the points in "spine"
+     * @param width
+     * @return an array containing, in order, the face vertices, face normals, and face texture coordinates.
+     */
+    public static double[][][][] extrude(
+            double[][] spine,
+            double[][] spineTangents,
+            double width
+    ) {
+        double[][][] vertices = new double[spine.length][2][];
+        double[] normal = new double[]{0, 1, 0};
+        double[][] quadNormals = new double[][] {
+                normal,
+                normal,
+                normal,
+                normal
+        };
+        double[][] quadTextureCoords = new double[][]{
+                {0, 0},
+                {0, 1},
+                {1, 1},
+                {1, 0}
+        };
+
+        for (int i = 0; i < spine.length; i++) {
+            double[] tangent = spineTangents[i];
+            double[] perpendicular1 = Util.normalize(new double[] {
+                    -tangent[2],
+                    tangent[1],
+                    tangent[0]
+            });
+            double[] perpendicular2 = Util.normalize(new double[] {
+                    tangent[2],
+                    tangent[1],
+                    -tangent[0]
+            });
+            double[] pos = spine[i];
+            vertices[i][0] = Util.sum(pos, Util.scale(width, perpendicular1));
+            vertices[i][1] = Util.sum(pos, Util.scale(width, perpendicular2));
+        }
+
+        int numFaces = spine.length - 1;
+        double[][][] faceVertices = new double[numFaces][][];
+        double[][][] faceNormals = new double[numFaces][][];
+        double[][][] faceTexCoords = new double[numFaces][][];
+        for (int face = 0; face < spine.length - 1; face++) {
+            faceNormals[face] = quadNormals;
+            faceTexCoords[face] = quadTextureCoords;
+            faceVertices[face] = new double[][] {
+                    vertices[face][1],
+                    vertices[face + 1][1],
+                    vertices[face + 1][0],
+                    vertices[face][0]
+            };
+        }
+
+        return new double[][][][] {
+                faceVertices,
+                faceNormals,
+                faceTexCoords
+        };
     }
 }
