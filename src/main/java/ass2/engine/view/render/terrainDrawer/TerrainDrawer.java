@@ -3,12 +3,12 @@ package ass2.engine.view.render.terrainDrawer;
 import ass2.engine.model.Direction;
 import ass2.engine.model.Terrain;
 import ass2.engine.view.render.DrawUtil;
+import ass2.engine.view.render.treeDrawer.TreeDrawer;
 import ass2.engine.view.shaders.Program;
 import ass2.engine.view.shaders.Shader;
 import ass2.engine.view.textures.Texture;
 
 import javax.media.opengl.GL2;
-import javax.media.opengl.GLProfile;
 import java.io.File;
 
 /**
@@ -33,9 +33,9 @@ public class TerrainDrawer {
 
     private static final String TERRAIN_TEXTURE_FILE_SRC = "src/main/resources/textures/BlueGreenBrick.png";
     private static final String TERRAIN_TEXTURE_FILE_TYPE = "png";
-
     private Texture terrainTexture;
-    private Texture treeTexture;
+
+    private TreeDrawer treeDrawer;
 
     public TerrainDrawer(Terrain terrain) {
 
@@ -80,17 +80,18 @@ public class TerrainDrawer {
             }
         }
 
+         this.treeDrawer = new TreeDrawer(terrain);
     }
 
     public void init(GL2 gl) {
         this.terrainTexture = new Texture(
-                GLProfile.getDefault(),
                 gl,
                 TERRAIN_TEXTURE_FILE_SRC,
                 TERRAIN_TEXTURE_FILE_TYPE);
         this.vertexShader.compile(gl);
         this.fragmentShader.compile(gl);
         this.shaderProgram = new Program(gl, vertexShader, fragmentShader);
+        this.treeDrawer.init(gl);
     }
 
     public void drawTerrain(GL2 gl, boolean useShaders) {
@@ -108,6 +109,7 @@ public class TerrainDrawer {
                         faceNormals[faceIndex],
                         faceTextureCoords[faceIndex]);
             }
+            treeDrawer.drawTrees(gl);
         } gl.glPopMatrix();
     }
 }

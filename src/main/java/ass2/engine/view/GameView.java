@@ -78,7 +78,7 @@ public class GameView implements GLEventListener {
         gl.glPushMatrix(); {
             gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, getSunlightPositionFloat(), 0);
             DrawUtil.drawAxes(gl);
-            //drawSunlight(gl);
+            drawSunlight(gl);
             terrainDrawer.drawTerrain(gl, gameModel.useShaders());
         } gl.glPopMatrix();
         gl.glFlush();

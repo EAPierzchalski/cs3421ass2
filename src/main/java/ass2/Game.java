@@ -47,6 +47,8 @@ public class Game {
         gameFrame.setSize(1024, 768);
         gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         gameFrame.setVisible(true);
+
+        gamePanel.requestFocusInWindow();
     }
     
     /**

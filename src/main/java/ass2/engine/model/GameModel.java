@@ -20,7 +20,7 @@ public class GameModel {
     private double[] playerLookDirection = new double[]{1, 0, 0};
     private double playerHeightAboveTerrain = DEFAULT_HEIGHT_ABOVE_TERRAIN;
 
-    private boolean useShaders = false;
+    private boolean useShaders = true;
 
     public GameModel(Terrain terrain) {
         this.terrain = terrain;

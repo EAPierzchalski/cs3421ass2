@@ -4,7 +4,6 @@ import ass2.engine.view.textures.Texture;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
-import java.util.Arrays;
 
 /**
  * User: Pierzchalski
@@ -15,6 +14,15 @@ import java.util.Arrays;
 public class DrawUtil {
 
     private static final float[] WHITE = new float[]{1, 1, 1, 1};
+
+    /***
+     *
+     * @param gl
+     * @param texture
+     * @param vertices
+     * @param normal
+     * @param textureCoords
+     */
     public static void drawPolygon3d(
             GL2 gl,
             Texture texture,
@@ -27,16 +35,46 @@ public class DrawUtil {
         // use the texture to modulate diffuse and ambient lighting
         gl.glTexEnvf(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, GL2.GL_MODULATE);
 
+        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, WHITE, 0);
+        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, WHITE, 0);
         gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2.GL_FILL);
         gl.glBegin(GL2.GL_POLYGON); {
-            gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, WHITE, 0);
-            gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, WHITE, 0);
             for (int i = 0; i < vertices.length; i++) {
-                double[] vertex = vertices[i];
-                double[] texCoords = textureCoords[i];
                 gl.glNormal3dv(normal, 0);
-                gl.glTexCoord2dv(texCoords, 0);
-                gl.glVertex3dv(vertex, 0);
+                gl.glTexCoord2dv(textureCoords[i], 0);
+                gl.glVertex3dv(vertices[i], 0);
+            }
+        } gl.glEnd();
+    }
+
+    /***
+     *
+     * @param gl
+     * @param texture
+     * @param vertices
+     * @param normals
+     * @param textureCoords
+     */
+    public static void drawPolygon3d(
+            GL2 gl,
+            Texture texture,
+            double[][] vertices,
+            double[][] normals,
+            double[][] textureCoords) {
+        gl.glColor3f(0, 0, 0);
+        // bind the texture
+        gl.glBindTexture(GL.GL_TEXTURE_2D, texture.getTextureID());
+        // use the texture to modulate diffuse and ambient lighting
+        gl.glTexEnvf(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, GL2.GL_MODULATE);
+
+        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, WHITE, 0);
+        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, WHITE, 0);
+        gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2.GL_FILL);
+        gl.glBegin(GL2.GL_POLYGON); {
+            for (int i = 0; i < vertices.length; i++) {
+                gl.glNormal3dv(normals[i], 0);
+                gl.glTexCoord2dv(textureCoords[i], 0);
+                gl.glVertex3dv(vertices[i], 0);
             }
         } gl.glEnd();
     }
@@ -57,9 +95,9 @@ public class DrawUtil {
 
     public static void drawLine(GL2 gl, double[] start, double[] end, float[] color) {
         gl.glLineWidth(3);
+        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, color, 0);
+        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, color, 0);
         gl.glBegin(GL2.GL_LINES); {
-            gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, color, 0);
-            gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, color, 0);
             gl.glVertex3dv(start, 0);
             gl.glVertex3dv(end, 0);
         } gl.glEnd();

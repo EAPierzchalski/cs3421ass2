@@ -78,4 +78,75 @@ public class Util {
         }
         return vScaleS;
     }
+
+    public static double[] unbox(Double[] boxedDoubles) {
+        double[] doubles = new double[boxedDoubles.length];
+        for (int i = 0; i < doubles.length; i++) {
+            doubles[i] = boxedDoubles[i];
+        }
+        return doubles;
+    }
+
+    public static double[][] uunbox(Double[][] boxedDoubles) {
+        double[][] doubles = new double[boxedDoubles.length][];
+        for (int i = 0; i < doubles.length; i++) {
+            doubles[i] = unbox(boxedDoubles[i]);
+        }
+        return doubles;
+    }
+
+    public static double[][][] unbox(Double[][][] boxedDoubles) {
+        double[][][] doubles = new double[boxedDoubles.length][][];
+        for (int i = 0; i < doubles.length; i++) {
+            doubles[i] = uunbox(boxedDoubles[i]);
+        }
+        return doubles;
+    }
+
+    public static Double[] box(double[] doubles) {
+        Double[] boxedDoubles = new Double[doubles.length];
+        for (int i = 0; i < boxedDoubles.length; i++) {
+            boxedDoubles[i] = doubles[i];
+        }
+        return boxedDoubles;
+    }
+
+    public static Double[][] box(double[][] doubles) {
+        Double[][] boxedDoubles = new Double[doubles.length][];
+        for (int i = 0; i < boxedDoubles.length; i++) {
+            boxedDoubles[i] = box(doubles[i]);
+        }
+        return boxedDoubles;
+    }
+
+    public static Double[][][] box(double[][][] doubles) {
+        Double[][][] boxedDoubles = new Double[doubles.length][][];
+        for (int i = 0; i < boxedDoubles.length; i++) {
+            boxedDoubles[i] = box(doubles[i]);
+        }
+        return boxedDoubles;
+    }
+
+    public static double[][][] flatten(double[][][][] allDoubles) {
+        int flattenedLength = 0;
+        for (double[][][] firstLayer : allDoubles) {
+            flattenedLength += firstLayer.length;
+        }
+        double[][][] flattenedDoubles = new double[flattenedLength][][];
+        int flattenedIndex = 0;
+        for (double[][][] firstLayer : allDoubles) {
+            for (double[][] secondLayer : firstLayer) {
+                flattenedDoubles[flattenedIndex] = secondLayer;
+                flattenedIndex++;
+            }
+        }
+        return flattenedDoubles;
+    }
+
+    public static double[][][] join(double[][][] doubles1, double[][][] doubles2) {
+        double[][][] joinedDoubles = new double[doubles1.length + doubles2.length][][];
+        System.arraycopy(doubles1, 0, joinedDoubles, 0, doubles1.length);
+        System.arraycopy(doubles2, 0, joinedDoubles, doubles1.length, doubles2.length);
+        return joinedDoubles;
+    }
 }

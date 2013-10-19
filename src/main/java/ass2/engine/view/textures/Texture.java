@@ -65,6 +65,10 @@ public class Texture {
 		}
         
 	}
+
+    public Texture(GL2 gl, String filename, String fileType) {
+        this(GLProfile.getDefault(), gl, filename, fileType);
+    }
 	
 	public int getTextureID() {
 		return textureID[0];

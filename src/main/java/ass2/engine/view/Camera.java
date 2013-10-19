@@ -96,7 +96,7 @@ public class Camera {
         GLU glu = new GLU();
         gl.glMatrixMode(GL2.GL_PROJECTION); {
             gl.glLoadIdentity();
-            glu.gluPerspective(90, aspectRatio, 0.2, 10);
+            glu.gluPerspective(100, aspectRatio, 0.2, 10);
         }
     }
 
