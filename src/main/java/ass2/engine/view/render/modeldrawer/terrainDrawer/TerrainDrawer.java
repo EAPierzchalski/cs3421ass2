@@ -1,15 +1,12 @@
-package ass2.engine.view.render.terrainDrawer;
+package ass2.engine.view.render.modeldrawer.terrainDrawer;
 
 import ass2.engine.model.Direction;
 import ass2.engine.model.Terrain;
 import ass2.engine.view.render.DrawUtil;
-import ass2.engine.view.render.treeDrawer.TreeDrawer;
-import ass2.engine.view.shaders.Program;
-import ass2.engine.view.shaders.Shader;
+import ass2.engine.view.render.modeldrawer.ComponentDrawer;
 import ass2.engine.view.textures.Texture;
 
 import javax.media.opengl.GL2;
-import java.io.File;
 
 /**
  * User: Pierzchalski
@@ -17,25 +14,16 @@ import java.io.File;
  * Package: ass2.engine.view.render
  * Project: cs3421ass2
  */
-public class TerrainDrawer {
+public class TerrainDrawer implements ComponentDrawer {
     private static final int VERTICES_PER_QUAD_QUARTER = 3;
 
     private double[][][] faceVertices;
     private double[][] faceNormals;
     private double[][][] faceTextureCoords;
 
-    private static final String VERTEX_SHADER_SRC = "src/main/resources/shaders/vertex/simple_vertex.glsl";
-    private static final String FRAGMENT_SHADER_SRC = "src/main/resources/shaders/fragment/simple_fragment.glsl";
-
-    private Shader vertexShader = new Shader(GL2.GL_VERTEX_SHADER, new File(VERTEX_SHADER_SRC));
-    private Shader fragmentShader = new Shader(GL2.GL_FRAGMENT_SHADER, new File(FRAGMENT_SHADER_SRC));
-    private Program shaderProgram;
-
     private static final String TERRAIN_TEXTURE_FILE_SRC = "src/main/resources/textures/BlueGreenBrick.png";
     private static final String TERRAIN_TEXTURE_FILE_TYPE = "png";
     private Texture terrainTexture;
-
-    private TreeDrawer treeDrawer;
 
     public TerrainDrawer(Terrain terrain) {
 
@@ -79,8 +67,6 @@ public class TerrainDrawer {
                 }
             }
         }
-
-         this.treeDrawer = new TreeDrawer(terrain);
     }
 
     public void init(GL2 gl) {
@@ -88,18 +74,9 @@ public class TerrainDrawer {
                 gl,
                 TERRAIN_TEXTURE_FILE_SRC,
                 TERRAIN_TEXTURE_FILE_TYPE);
-        this.vertexShader.compile(gl);
-        this.fragmentShader.compile(gl);
-        this.shaderProgram = new Program(gl, vertexShader, fragmentShader);
-        this.treeDrawer.init(gl);
     }
 
-    public void drawTerrain(GL2 gl, boolean useShaders) {
-        if (useShaders) {
-            gl.glUseProgram(shaderProgram.getMyID());
-        } else {
-            gl.glUseProgram(0);
-        }
+    public void draw(GL2 gl) {
         gl.glPushMatrix(); {
             for (int faceIndex = 0; faceIndex < faceVertices.length; faceIndex ++) {
                 DrawUtil.drawPolygon3d(
@@ -109,7 +86,6 @@ public class TerrainDrawer {
                         faceNormals[faceIndex],
                         faceTextureCoords[faceIndex]);
             }
-            treeDrawer.drawTrees(gl);
         } gl.glPopMatrix();
     }
 }

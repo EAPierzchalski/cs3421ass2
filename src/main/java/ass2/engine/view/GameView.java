@@ -2,7 +2,8 @@ package ass2.engine.view;
 
 import ass2.engine.model.GameModel;
 import ass2.engine.view.render.DrawUtil;
-import ass2.engine.view.render.terrainDrawer.TerrainDrawer;
+import ass2.engine.view.render.modeldrawer.ModelDrawer;
+import ass2.engine.view.render.modeldrawer.terrainDrawer.TerrainDrawer;
 
 import javax.media.opengl.*;
 
@@ -17,6 +18,7 @@ public class GameView implements GLEventListener {
     private GameModel gameModel;
     private Camera camera;
     private TerrainDrawer terrainDrawer;
+    private ModelDrawer modelDrawer;
 
     private static final double[] BACKGROUND_COLOR = new double[]{0, 0, 0, 1};
     private static final float[] SUNLIGHT_DIFFUSE_COLOR = new float[]{1f, 1f, 1f, 1};
@@ -26,6 +28,7 @@ public class GameView implements GLEventListener {
         this.gameModel = gameModel;
         this.camera = new Camera(gameModel.getPlayer3DPosition(), gameModel.getPlayerLookDirection());
         this.terrainDrawer = new TerrainDrawer(gameModel.getTerrain());
+        this.modelDrawer = new ModelDrawer(gameModel.getTerrain());
     }
 
     @Override
@@ -44,6 +47,8 @@ public class GameView implements GLEventListener {
         gl.glShadeModel(GL2.GL_SMOOTH);
 
         gl.glEnable(GL2.GL_TEXTURE_2D);
+
+        modelDrawer.init(gl);
 
         terrainDrawer.init(gl);
     }
@@ -79,7 +84,7 @@ public class GameView implements GLEventListener {
             gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, getSunlightPositionFloat(), 0);
             DrawUtil.drawAxes(gl);
             drawSunlight(gl);
-            terrainDrawer.drawTerrain(gl, gameModel.useShaders());
+            modelDrawer.draw(gl, gameModel.useShaders());
         } gl.glPopMatrix();
         gl.glFlush();
     }

@@ -1,8 +1,9 @@
-package ass2.engine.view.render.treeDrawer;
+package ass2.engine.view.render.modeldrawer.treeDrawer;
 
 import ass2.engine.model.Terrain;
 import ass2.engine.model.Tree;
 import ass2.engine.view.render.DrawUtil;
+import ass2.engine.view.render.modeldrawer.ComponentDrawer;
 import ass2.engine.view.textures.Texture;
 
 import javax.media.opengl.GL2;
@@ -10,14 +11,14 @@ import javax.media.opengl.GL2;
 /**
  * User: Pierzchalski
  * Date: 17/10/13
- * Package: ass2.engine.view.render.treeDrawer
+ * Package: ass2.engine.view.render.modeldrawer.treeDrawer
  * Project: cs3421ass2
  */
-public class TreeDrawer {
+public class TreeDrawer implements ComponentDrawer {
     private Terrain terrain;
+
     private static final String TREE_TEXTURE_FILE_SRC = "src/main/resources/textures/HeatedMetal.png";
     private static final String TREE_TEXTURE_FILE_TYPE = "png";
-
     private Texture treeTexture;
 
     public TreeDrawer(Terrain terrain) {
@@ -31,7 +32,7 @@ public class TreeDrawer {
                 TREE_TEXTURE_FILE_TYPE);
     }
 
-    public void drawTrees(GL2 gl) {
+    public void draw(GL2 gl) {
         for (Tree tree : terrain.trees()) {
             drawTree(gl, tree);
         }

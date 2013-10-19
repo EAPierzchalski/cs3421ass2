@@ -1,11 +1,11 @@
-package ass2.engine.view.render.treeDrawer;
+package ass2.engine.view.render.modeldrawer.treeDrawer;
 
 import ass2.engine.view.render.GeometryUtil;
 
 /**
  * User: Pierzchalski
  * Date: 17/10/13
- * Package: ass2.engine.view.render.treeDrawer
+ * Package: ass2.engine.view.render.modeldrawer.treeDrawer
  * Project: cs3421ass2
  */
 
