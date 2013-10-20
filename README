@@ -1,1 +1,13 @@
-This file was created by IntelliJ IDEA 12.1.4 for binding GitHub repository
+WASD and arrow keys both control movement.
+
+Space and shift move the player up and down, respectively.
+
+Z switches between shaders (and one option which indicates no shader, i.e. the built-in pipeline).
+
+C toggles the day/night cycle (the cycle is 1 minute long, with shifting colors).
+
+L toggles the flashlight.
+
+Since I use key bindings (KeyEventListeners are apparently considered deprecated), the frame/panel will sometimes
+lose focus upon creation. I've done my best to automatically get focus upon creation, but if it loses it, it seems
+the only solution is to re-run the program. Apologies to the marker :(

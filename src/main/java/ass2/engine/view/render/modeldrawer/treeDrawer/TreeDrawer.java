@@ -1,7 +1,7 @@
 package ass2.engine.view.render.modeldrawer.treeDrawer;
 
-import ass2.engine.model.Terrain;
-import ass2.engine.model.Tree;
+import ass2.engine.model.components.Terrain;
+import ass2.engine.model.components.Tree;
 import ass2.engine.view.render.DrawUtil;
 import ass2.engine.view.render.modeldrawer.ComponentDrawer;
 import ass2.engine.view.textures.Texture;
@@ -16,6 +16,8 @@ import javax.media.opengl.GL2;
  */
 public class TreeDrawer implements ComponentDrawer {
     private Terrain terrain;
+
+    private static final float TREE_SHININESS = 10;
 
     private static final String TREE_TEXTURE_FILE_SRC = "src/main/resources/textures/HeatedMetal.png";
     private static final String TREE_TEXTURE_FILE_TYPE = "png";
@@ -46,6 +48,7 @@ public class TreeDrawer implements ComponentDrawer {
                 DrawUtil.drawPolygon3d(
                         gl,
                         treeTexture,
+                        TREE_SHININESS,
                         TreeDrawerUtil.treeCylinderVertices[faceIndex],
                         TreeDrawerUtil.treeCylinderNormals[faceIndex],
                         TreeDrawerUtil.treeCylinderTexCoords[faceIndex]

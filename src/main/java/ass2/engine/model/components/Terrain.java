@@ -1,5 +1,6 @@
-package ass2.engine.model;
+package ass2.engine.model.components;
 
+import ass2.engine.model.Direction;
 import ass2.util.Tuple2;
 import ass2.util.Util;
 

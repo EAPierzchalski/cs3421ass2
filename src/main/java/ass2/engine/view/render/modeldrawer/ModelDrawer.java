@@ -1,6 +1,6 @@
 package ass2.engine.view.render.modeldrawer;
 
-import ass2.engine.model.Terrain;
+import ass2.engine.model.components.Terrain;
 import ass2.engine.view.render.modeldrawer.roadDrawer.RoadDrawer;
 import ass2.engine.view.render.modeldrawer.terrainDrawer.TerrainDrawer;
 import ass2.engine.view.render.modeldrawer.treeDrawer.TreeDrawer;

@@ -1,4 +1,4 @@
-package ass2.engine.model;
+package ass2.engine.model.components;
 
 /**
  * COMMENT: Comment Tree 

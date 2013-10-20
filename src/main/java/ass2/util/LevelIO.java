@@ -1,8 +1,8 @@
 package ass2.util;
 
-import ass2.engine.model.Terrain;
-import ass2.engine.model.Road;
-import ass2.engine.model.Tree;
+import ass2.engine.model.components.Terrain;
+import ass2.engine.model.components.Road;
+import ass2.engine.model.components.Tree;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

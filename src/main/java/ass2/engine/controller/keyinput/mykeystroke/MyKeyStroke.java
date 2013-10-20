@@ -26,7 +26,11 @@ public enum MyKeyStroke {
     W(KeyEvent.VK_W),
     A(KeyEvent.VK_A),
     S(KeyEvent.VK_S),
-    D(KeyEvent.VK_D);
+    D(KeyEvent.VK_D),
+
+    L(KeyEvent.VK_L),
+    C(KeyEvent.VK_C);
+
 
     private MyKeyStroke(int keyEventCode) {
         PRESSED = javax.swing.KeyStroke.getKeyStroke(keyEventCode, 0, false);

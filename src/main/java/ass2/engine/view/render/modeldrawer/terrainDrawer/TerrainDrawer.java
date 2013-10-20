@@ -1,7 +1,7 @@
 package ass2.engine.view.render.modeldrawer.terrainDrawer;
 
 import ass2.engine.model.Direction;
-import ass2.engine.model.Terrain;
+import ass2.engine.model.components.Terrain;
 import ass2.engine.view.render.DrawUtil;
 import ass2.engine.view.render.modeldrawer.ComponentDrawer;
 import ass2.engine.view.textures.Texture;
@@ -16,6 +16,8 @@ import javax.media.opengl.GL2;
  */
 public class TerrainDrawer implements ComponentDrawer {
     private static final int VERTICES_PER_QUAD_QUARTER = 3;
+
+    private static final float TERRAIN_SHININESS = 1;
 
     private double[][][] faceVertices;
     private double[][] faceNormals;
@@ -82,6 +84,7 @@ public class TerrainDrawer implements ComponentDrawer {
                 DrawUtil.drawPolygon3d(
                         gl,
                         terrainTexture,
+                        TERRAIN_SHININESS,
                         faceVertices[faceIndex],
                         faceNormals[faceIndex],
                         faceTextureCoords[faceIndex]);

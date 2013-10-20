@@ -68,8 +68,24 @@ public enum GameAction {
     TOGGLE_SHADERS(MyKeyStroke.Z) {
         @Override
         public void doActionOn(GameModel gameModel, double dt, KeyBinder sourceBinder) {
-            gameModel.toggleUseShaders();
+            gameModel.toggleUsingShaders();
             sourceBinder.cancelGameAction(TOGGLE_SHADERS);
+        }
+    },
+
+    TOGGLE_FLASHLIGHT(MyKeyStroke.L) {
+        @Override
+        public void doActionOn(GameModel gameModel, double dt, KeyBinder sourceBinder) {
+            gameModel.toggleUsingFlashlight();
+            sourceBinder.cancelGameAction(TOGGLE_FLASHLIGHT);
+        }
+    },
+
+    TOGGLE_DAYNIGHT_CYCLE(MyKeyStroke.C) {
+        @Override
+        public void doActionOn(GameModel gameModel, double dt, KeyBinder sourceBinder) {
+            gameModel.toggleUsingDayNightCycle();
+            sourceBinder.cancelGameAction(TOGGLE_DAYNIGHT_CYCLE);
         }
     }
     ;

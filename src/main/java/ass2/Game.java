@@ -1,7 +1,7 @@
 package ass2;
 
 import ass2.engine.GameEngine;
-import ass2.engine.model.Terrain;
+import ass2.engine.model.components.Terrain;
 import ass2.util.LevelIO;
 import org.json.JSONException;
 

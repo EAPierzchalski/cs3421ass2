@@ -2,7 +2,7 @@ package ass2.engine;
 
 import ass2.engine.controller.GameController;
 import ass2.engine.model.GameModel;
-import ass2.engine.model.Terrain;
+import ass2.engine.model.components.Terrain;
 import ass2.engine.view.GameView;
 import com.jogamp.opengl.util.FPSAnimator;
 

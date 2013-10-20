@@ -26,6 +26,7 @@ public class DrawUtil {
     public static void drawPolygon3d(
             GL2 gl,
             Texture texture,
+            float shininess,
             double[][] vertices,
             double[] normal,
             double[][] textureCoords) {
@@ -36,6 +37,8 @@ public class DrawUtil {
 
         gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, WHITE, 0);
         gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, WHITE, 0);
+        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, WHITE, 0);
+        gl.glMaterialf (GL2.GL_FRONT, GL2.GL_SHININESS, shininess);
         gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2.GL_FILL);
         gl.glBegin(GL2.GL_POLYGON); {
             for (int i = 0; i < vertices.length; i++) {
@@ -57,6 +60,7 @@ public class DrawUtil {
     public static void drawPolygon3d(
             GL2 gl,
             Texture texture,
+            float shininess,
             double[][] vertices,
             double[][] normals,
             double[][] textureCoords) {
@@ -67,6 +71,8 @@ public class DrawUtil {
 
         gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, WHITE, 0);
         gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, WHITE, 0);
+        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, WHITE, 0);
+        gl.glMaterialf (GL2.GL_FRONT, GL2.GL_SHININESS, shininess);
         gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2.GL_FILL);
         gl.glBegin(GL2.GL_POLYGON); {
             for (int i = 0; i < vertices.length; i++) {
@@ -80,6 +86,7 @@ public class DrawUtil {
     public static void drawMesh3d(
             GL2 gl,
             Texture texture,
+            float shininess,
             double[][][] vertices,
             double[][][] normals,
             double[][][] textureCoords
@@ -91,6 +98,7 @@ public class DrawUtil {
             drawPolygon3d(
                     gl,
                     texture,
+                    shininess,
                     faceVertices,
                     faceNormals,
                     faceTextureCoords
@@ -116,9 +124,21 @@ public class DrawUtil {
         gl.glLineWidth(3);
         gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, color, 0);
         gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, color, 0);
+        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, color, 0);
         gl.glBegin(GL2.GL_LINES); {
             gl.glVertex3dv(start, 0);
             gl.glVertex3dv(end, 0);
+        } gl.glEnd();
+    }
+
+    public static void drawLine(GL2 gl, float[] start, float[] end, float[] color) {
+        gl.glLineWidth(3);
+        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, color, 0);
+        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, color, 0);
+        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, color, 0);
+        gl.glBegin(GL2.GL_LINES); {
+            gl.glVertex3fv(start, 0);
+            gl.glVertex3fv(end, 0);
         } gl.glEnd();
     }
 
@@ -126,6 +146,7 @@ public class DrawUtil {
         gl.glLineWidth(3);
         gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, color, 0);
         gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, color, 0);
+        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, color, 0);
         gl.glBegin(GL2.GL_LINE_STRIP); {
             for (double[] vertex : vertices) {
                 gl.glVertex3dv(vertex, 0);

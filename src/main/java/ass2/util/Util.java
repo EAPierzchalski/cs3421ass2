@@ -71,8 +71,24 @@ public class Util {
         return v1addV2;
     }
 
+    public static float[] sum(float[] v1, float[] v2) {
+        float[] v1addV2 = new float[v1.length];
+        for (int i = 0; i < v1addV2.length; i++) {
+            v1addV2[i] = v1[i] + v2[i];
+        }
+        return v1addV2;
+    }
+
     public static double[] scale(double s, double[] v) {
         double[] sv = new double[v.length];
+        for (int i = 0; i < v.length; i++) {
+            sv[i] = s * v[i];
+        }
+        return sv;
+    }
+
+    public static float[] scale(float s, float[] v) {
+        float[] sv = new float[v.length];
         for (int i = 0; i < v.length; i++) {
             sv[i] = s * v[i];
         }

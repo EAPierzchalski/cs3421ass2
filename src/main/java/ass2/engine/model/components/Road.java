@@ -1,4 +1,4 @@
-package ass2.engine.model;
+package ass2.engine.model.components;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -132,7 +132,6 @@ public class Road {
     public double[] tangent(double t) {
         int i = (int)Math.floor(t);
         double bezierT = t - i;
-        System.out.println(t);
         if (Math.abs(t - (double) size()) < LAST_POINT_TOLERANCE) {
             double x2 = myPoints.get(myPoints.size() - 4);
             double y2 = myPoints.get(myPoints.size() - 3);

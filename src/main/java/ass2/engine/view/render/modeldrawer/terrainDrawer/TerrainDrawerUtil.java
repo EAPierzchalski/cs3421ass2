@@ -1,7 +1,7 @@
 package ass2.engine.view.render.modeldrawer.terrainDrawer;
 
 import ass2.engine.model.Direction;
-import ass2.engine.model.Terrain;
+import ass2.engine.model.components.Terrain;
 import ass2.util.Util;
 
 /**

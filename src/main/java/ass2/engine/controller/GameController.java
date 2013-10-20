@@ -19,11 +19,13 @@ public class GameController implements GLEventListener {
     private KeyBinder keyBinder;
     private long myTime;
     private Mouse myMouse;
+    private GameModel gameModel;
 
     public GameController(GameModel gameModel) {
         this.keyBinder = new KeyBinder(gameModel);
         this.myMouse = new Mouse(gameModel);
         this.myTime = System.currentTimeMillis();
+        this.gameModel = gameModel;
     }
 
     public void bindToPanel(JComponent jComponent) {
@@ -49,6 +51,7 @@ public class GameController implements GLEventListener {
         double dt = (newTime - myTime) / 1000.0;
         myTime = newTime;
         keyBinder.update(dt);
+        gameModel.update(dt);
         myMouse.update(gl);
     }
 

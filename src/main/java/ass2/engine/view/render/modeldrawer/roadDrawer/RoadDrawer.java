@@ -1,7 +1,7 @@
 package ass2.engine.view.render.modeldrawer.roadDrawer;
 
-import ass2.engine.model.Road;
-import ass2.engine.model.Terrain;
+import ass2.engine.model.components.Road;
+import ass2.engine.model.components.Terrain;
 import ass2.engine.view.render.DrawUtil;
 import ass2.engine.view.render.GeometryUtil;
 import ass2.engine.view.render.modeldrawer.ComponentDrawer;
@@ -18,6 +18,8 @@ import java.util.List;
  */
 public class RoadDrawer implements ComponentDrawer {
     private static final int NUM_POINTS_PER_SPLINE = 10;
+
+    private static final float ROAD_SHININESS = 200;
 
     private static final String ROAD_TEXTURE_FILE_SRC = "src/main/resources/textures/BrightPurpleMarble.png";
     private static final String ROAD_TEXTURE_FILE_TYPE = "png";
@@ -57,6 +59,7 @@ public class RoadDrawer implements ComponentDrawer {
                 DrawUtil.drawMesh3d(
                         gl,
                         roadTexture,
+                        ROAD_SHININESS,
                         roadFaceVertices[roadIndex],
                         roadFaceNormals[roadIndex],
                         roadFaceTexCoords[roadIndex]
