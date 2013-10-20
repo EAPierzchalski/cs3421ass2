@@ -107,6 +107,10 @@ public class GameView implements GLEventListener {
             } else {
                 Program program = shaderChoice.getProgram();
                 gl.glUseProgram(program.getMyID());
+                if (shaderChoice == ShaderChoice.PHONG) {
+                    gl.glUniform1i(gl.glGetUniformLocation(program.getMyID(), "texture_sampler"), 0);
+                    gl.glUniform1i(gl.glGetUniformLocation(program.getMyID(), "normal_sampler"), 1);
+                }
             }
             modelDrawer.draw(gl);
         } gl.glPopMatrix();

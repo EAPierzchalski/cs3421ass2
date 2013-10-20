@@ -31,6 +31,7 @@ public class DrawUtil {
             double[] normal,
             double[][] textureCoords) {
         // bind the texture
+        gl.glActiveTexture(GL.GL_TEXTURE0);
         gl.glBindTexture(GL.GL_TEXTURE_2D, texture.getTextureID());
         // use the texture to modulate diffuse and ambient lighting
         gl.glTexEnvf(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, GL2.GL_MODULATE);
@@ -65,6 +66,7 @@ public class DrawUtil {
             double[][] normals,
             double[][] textureCoords) {
         // bind the texture
+        gl.glActiveTexture(GL.GL_TEXTURE0);
         gl.glBindTexture(GL.GL_TEXTURE_2D, texture.getTextureID());
         // use the texture to modulate diffuse and ambient lighting
         gl.glTexEnvf(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, GL2.GL_MODULATE);

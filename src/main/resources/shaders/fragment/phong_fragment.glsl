@@ -4,12 +4,14 @@
 
 #version 120
 
+uniform sampler2D texture_sampler;
+uniform sampler2D normal_sampler;
+
+uniform int ActiveLights = 2;
+
 varying vec3 normal;
 varying vec3 position;
 varying vec4 ambient;
-varying vec2 texture_coordinate;
-uniform sampler2D texture_sampler;
-uniform int ActiveLights = 2;
 
 void main(void) {
     vec3 lightDir;
@@ -17,6 +19,8 @@ void main(void) {
     vec3 eyeDir = normalize(-position);
     vec4 lightAmbientDiffuse = vec4(0.0, 0.0, 0.0, 0.0);
     vec4 lightSpecular = vec4(0.0, 0.0, 0.0, 0.0);
+    vec3 myNormal = gl_NormalMatrix * (vec3(texture2D(normal_sampler, gl_TexCoord[1].st)) - vec3(0.5, 0.5, 0.5));
+    myNormal = normalize(normal + myNormal);
 
     for (int i=0; i<ActiveLights; ++i){
 
@@ -39,16 +43,19 @@ void main(void) {
 
         // ambient + diffuse
         lightAmbientDiffuse += gl_FrontLightProduct[i].ambient * attenFactor;
-        lightAmbientDiffuse += gl_FrontLightProduct[i].diffuse * max(dot(normal, lightDir), 0.0) * attenFactor;
+        lightAmbientDiffuse += gl_FrontLightProduct[i].diffuse * max(dot(myNormal, lightDir), 0.0) * attenFactor;
 
         // specular
-        vec3 r = normalize(reflect(lightDir, normal));
+        vec3 r = normalize(reflect(lightDir, myNormal));
         lightSpecular += gl_FrontLightProduct[i].specular *
                 pow(max(dot(r, eyeDir), 0.0), gl_FrontMaterial.shininess) *
                 attenFactor * 0.5;
     }
 
     // compute final color
-    vec4 texColor = texture2D(texture_sampler, texture_coordinate);
+    vec4 texColor = texture2D(texture_sampler, gl_TexCoord[0].st);
     gl_FragColor  = texColor * (lightAmbientDiffuse + lightSpecular);
+    if (myNormal[1] == 0) {
+        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    }
 }

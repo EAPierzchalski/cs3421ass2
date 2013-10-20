@@ -6,6 +6,7 @@ import ass2.engine.view.render.DrawUtil;
 import ass2.engine.view.render.modeldrawer.ComponentDrawer;
 import ass2.engine.view.textures.Texture;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
 /**
@@ -26,6 +27,10 @@ public class TerrainDrawer implements ComponentDrawer {
     private static final String TERRAIN_TEXTURE_FILE_SRC = "src/main/resources/textures/BlueGreenBrick.png";
     private static final String TERRAIN_TEXTURE_FILE_TYPE = "png";
     private Texture terrainTexture;
+
+    private static final String TERRAIN_NORMAL_FILE_SRC = "src/main/resources/textures/BlueGreenBrick-NormalMap.png";
+    private static final String TERRAIN_NORMAL_FILE_TYPE = "png";
+    private Texture normalTexture;
 
     public TerrainDrawer(Terrain terrain) {
 
@@ -76,10 +81,17 @@ public class TerrainDrawer implements ComponentDrawer {
                 gl,
                 TERRAIN_TEXTURE_FILE_SRC,
                 TERRAIN_TEXTURE_FILE_TYPE);
+        this.normalTexture = new Texture(
+                gl,
+                TERRAIN_NORMAL_FILE_SRC,
+                TERRAIN_NORMAL_FILE_TYPE
+        );
     }
 
     public void draw(GL2 gl) {
         gl.glPushMatrix(); {
+            gl.glActiveTexture(GL.GL_TEXTURE1);
+            gl.glBindTexture(GL.GL_TEXTURE_2D, normalTexture.getTextureID());
             for (int faceIndex = 0; faceIndex < faceVertices.length; faceIndex ++) {
                 DrawUtil.drawPolygon3d(
                         gl,
