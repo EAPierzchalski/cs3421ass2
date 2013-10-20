@@ -172,15 +172,15 @@ public class GeometryUtil {
                     -tangent[0]
             });
             double[] pos = spine[i];
-            vertices[i][0] = Util.sum(pos, Util.scale(width, perpendicular1));
-            vertices[i][1] = Util.sum(pos, Util.scale(width, perpendicular2));
+            vertices[i][0] = Util.sum(pos, Util.scale(width/2, perpendicular1));
+            vertices[i][1] = Util.sum(pos, Util.scale(width/2, perpendicular2));
         }
 
         int numFaces = spine.length - 1;
         double[][][] faceVertices = new double[numFaces][][];
         double[][][] faceNormals = new double[numFaces][][];
         double[][][] faceTexCoords = new double[numFaces][][];
-        for (int face = 0; face < spine.length - 1; face++) {
+        for (int face = 0; face < numFaces; face++) {
             faceNormals[face] = quadNormals;
             faceTexCoords[face] = quadTextureCoords;
             faceVertices[face] = new double[][] {

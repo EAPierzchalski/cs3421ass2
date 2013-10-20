@@ -29,7 +29,6 @@ public class DrawUtil {
             double[][] vertices,
             double[] normal,
             double[][] textureCoords) {
-        gl.glColor3f(0, 0, 0);
         // bind the texture
         gl.glBindTexture(GL.GL_TEXTURE_2D, texture.getTextureID());
         // use the texture to modulate diffuse and ambient lighting
@@ -61,7 +60,6 @@ public class DrawUtil {
             double[][] vertices,
             double[][] normals,
             double[][] textureCoords) {
-        gl.glColor3f(0, 0, 0);
         // bind the texture
         gl.glBindTexture(GL.GL_TEXTURE_2D, texture.getTextureID());
         // use the texture to modulate diffuse and ambient lighting
@@ -77,6 +75,27 @@ public class DrawUtil {
                 gl.glVertex3dv(vertices[i], 0);
             }
         } gl.glEnd();
+    }
+
+    public static void drawMesh3d(
+            GL2 gl,
+            Texture texture,
+            double[][][] vertices,
+            double[][][] normals,
+            double[][][] textureCoords
+    ) {
+        for (int faceIndex = 0; faceIndex < vertices.length; faceIndex++) {
+            double[][] faceVertices = vertices[faceIndex];
+            double[][] faceNormals = normals[faceIndex];
+            double[][] faceTextureCoords = textureCoords[faceIndex];
+            drawPolygon3d(
+                    gl,
+                    texture,
+                    faceVertices,
+                    faceNormals,
+                    faceTextureCoords
+            );
+        }
     }
 
     private static final float[] RED = new float[]{1, 0, 0, 1};
@@ -100,6 +119,17 @@ public class DrawUtil {
         gl.glBegin(GL2.GL_LINES); {
             gl.glVertex3dv(start, 0);
             gl.glVertex3dv(end, 0);
+        } gl.glEnd();
+    }
+
+    public static void drawLine(GL2 gl, double[][] vertices, float[] color) {
+        gl.glLineWidth(3);
+        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, color, 0);
+        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, color, 0);
+        gl.glBegin(GL2.GL_LINE_STRIP); {
+            for (double[] vertex : vertices) {
+                gl.glVertex3dv(vertex, 0);
+            }
         } gl.glEnd();
     }
 }

@@ -12,6 +12,8 @@ public class Road {
 
     private List<Double> myPoints;
     private double myWidth;
+
+    private static final double LAST_POINT_TOLERANCE = 1e-6;
     
     /** 
      * Create a new road starting at the specified point
@@ -97,10 +99,14 @@ public class Road {
      */
     public double[] point(double t) {
         int i = (int)Math.floor(t);
-        t = t - i;
-        
-        i *= 6;
-        
+        double bezierT = t - i;
+        if (Math.abs(t - (double) size()) < LAST_POINT_TOLERANCE) {
+            return new double[]{
+                    myPoints.get(myPoints.size() - 2),
+                    myPoints.get(myPoints.size() - 1)
+            };
+        }
+
         double x0 = myPoints.get(i++);
         double y0 = myPoints.get(i++);
         double x1 = myPoints.get(i++);
@@ -112,8 +118,8 @@ public class Road {
         
         double[] p = new double[2];
 
-        p[0] = b(0, t) * x0 + b(1, t) * x1 + b(2, t) * x2 + b(3, t) * x3;
-        p[1] = b(0, t) * y0 + b(1, t) * y1 + b(2, t) * y2 + b(3, t) * y3;        
+        p[0] = b(0, bezierT) * x0 + b(1, bezierT) * x1 + b(2, bezierT) * x2 + b(3, bezierT) * x3;
+        p[1] = b(0, bezierT) * y0 + b(1, bezierT) * y1 + b(2, bezierT) * y2 + b(3, bezierT) * y3;
         
         return p;
     }
@@ -126,7 +132,19 @@ public class Road {
     public double[] tangent(double t) {
         int i = (int)Math.floor(t);
         double bezierT = t - i;
-
+        System.out.println(t);
+        if (Math.abs(t - (double) size()) < LAST_POINT_TOLERANCE) {
+            double x2 = myPoints.get(myPoints.size() - 4);
+            double y2 = myPoints.get(myPoints.size() - 3);
+            double x3 = myPoints.get(myPoints.size() - 2);
+            double y3 = myPoints.get(myPoints.size() - 1);
+            double bx2 = x3 - x2;
+            double by2 = y3 - y2;
+            return new double[] {
+                    3 * bx2,
+                    3 * by2
+            };
+        }
         i *= 6;
 
         double x0 = myPoints.get(i++);
@@ -146,10 +164,12 @@ public class Road {
         double by2 = y3 - y2;
 
         double[] tangent = new double[2];
-        tangent[0] = bTangent(0, bezierT) * bx0 +
+        tangent[0] =
+                bTangent(0, bezierT) * bx0 +
                 bTangent(1, bezierT) * bx1 +
                 bTangent(2, bezierT) * bx2;
-        tangent[1] = bTangent(0, bezierT) * by0 +
+        tangent[1] =
+                bTangent(0, bezierT) * by0 +
                 bTangent(1, bezierT) * by1 +
                 bTangent(2, bezierT) * by2;
         return tangent;

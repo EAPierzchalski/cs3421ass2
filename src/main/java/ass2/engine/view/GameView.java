@@ -48,6 +48,8 @@ public class GameView implements GLEventListener {
 
         gl.glEnable(GL2.GL_TEXTURE_2D);
 
+        gl.glEnable(GL2.GL_POLYGON_OFFSET_FILL);
+
         modelDrawer.init(gl);
 
         terrainDrawer.init(gl);
