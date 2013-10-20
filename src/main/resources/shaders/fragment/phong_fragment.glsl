@@ -14,7 +14,9 @@ uniform int ActiveLights = 2;
 void main(void) {
     vec3 lightDir;
     float attenFactor;
+    vec3 eyeDir = normalize(-position);
     vec4 lightAmbientDiffuse = vec4(0.0, 0.0, 0.0, 0.0);
+    vec4 lightSpecular = vec4(0.0, 0.0, 0.0, 0.0);
 
     for (int i=0; i<ActiveLights; ++i){
 
@@ -38,9 +40,15 @@ void main(void) {
         // ambient + diffuse
         lightAmbientDiffuse += gl_FrontLightProduct[i].ambient * attenFactor;
         lightAmbientDiffuse += gl_FrontLightProduct[i].diffuse * max(dot(normal, lightDir), 0.0) * attenFactor;
+
+        // specular
+        vec3 r = normalize(reflect(lightDir, normal));
+        lightSpecular += gl_FrontLightProduct[i].specular *
+                pow(max(dot(r, eyeDir), 0.0), gl_FrontMaterial.shininess) *
+                attenFactor * 0.5;
     }
 
     // compute final color
     vec4 texColor = texture2D(texture_sampler, texture_coordinate);
-    gl_FragColor  = texColor * lightAmbientDiffuse;
+    gl_FragColor  = texColor * (lightAmbientDiffuse + lightSpecular);
 }

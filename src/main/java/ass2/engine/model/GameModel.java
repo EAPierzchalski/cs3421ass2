@@ -1,6 +1,7 @@
 package ass2.engine.model;
 
 import ass2.engine.model.components.Terrain;
+import ass2.engine.model.shaderoptions.ShaderChoice;
 import ass2.util.Util;
 
 /**
@@ -26,9 +27,10 @@ public class GameModel {
     private static final double DAY_LENGTH_IN_SECONDS = 60;
     private double sunlightAngle = 0;
 
-    private boolean usingShaders = true;
     private boolean usingFlashlight = true;
     private boolean usingDayNightCycle = true;
+
+    private ShaderChoice shaderChoice = ShaderChoice.NONE;
 
     public GameModel(Terrain terrain) {
         this.terrain = terrain;
@@ -76,10 +78,6 @@ public class GameModel {
         this.playerLookDirection = Util.normalize(Util.sum(this.playerLookDirection, translation));
     }
 
-    public void toggleUsingShaders() {
-        usingShaders = !usingShaders;
-    }
-
     public void toggleUsingFlashlight() {
         usingFlashlight = !usingFlashlight;
     }
@@ -88,8 +86,12 @@ public class GameModel {
         usingDayNightCycle = !usingDayNightCycle;
     }
 
-    public boolean isUsingShaders() {
-        return usingShaders;
+    public void cycleShaders() {
+        shaderChoice = shaderChoice.getNext();
+    }
+
+    public ShaderChoice getShaderChoice() {
+        return shaderChoice;
     }
 
     public boolean isUsingFlashlight() {

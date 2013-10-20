@@ -2,11 +2,12 @@ WASD and arrow keys both control movement.
 
 Space and shift move the player up and down, respectively.
 
-Z switches between shaders (and one option which indicates no shader, i.e. the built-in pipeline).
+Z switches between shaders (and one option which indicates no shader, i.e. the built-in pipeline). The current list of
+shaders is None, Simple, Phong, and a simple cell-shader, in that order.
 
 C toggles the day/night cycle (the cycle is 1 minute long, with shifting colors).
 
-L toggles the flashlight.
+L toggles the flashlight. When using shaders, the normal cos cutoff isn't implemented because it looks ugly as hell.
 
 Since I use key bindings (KeyEventListeners are apparently considered deprecated), the frame/panel will sometimes
 lose focus upon creation. I've done my best to automatically get focus upon creation, but if it loses it, it seems

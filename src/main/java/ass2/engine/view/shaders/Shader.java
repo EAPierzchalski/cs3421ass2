@@ -68,7 +68,5 @@ public class Shader {
             throw new CompilationException("Error compiling the vertex shader: "
                     + new String(log));
         }
-
-        //gl.glLinkProgram(myID);
     }
 }

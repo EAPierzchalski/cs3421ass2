@@ -1,8 +1,10 @@
 package ass2.engine.view;
 
 import ass2.engine.model.GameModel;
+import ass2.engine.model.shaderoptions.ShaderChoice;
 import ass2.engine.view.render.DrawUtil;
 import ass2.engine.view.render.modeldrawer.ModelDrawer;
+import ass2.engine.view.shaders.Program;
 import ass2.util.Util;
 
 import javax.media.opengl.GL;
@@ -25,6 +27,9 @@ public class GameView implements GLEventListener {
     private static final float[] AMBIENT_COLOR = new float[]{0.1f, 0.1f, 0.1f, 1};
     private static final float[] FLASHLIGHT_COLOR_ON = Util.scale(40, AMBIENT_COLOR);
     private static final float[] FLASHLIGHT_COLOR_OFF = new float[]{0, 0, 0, 1};
+
+    private static final long START_TIME_MILLIS = System.currentTimeMillis();
+    private int glslTimeLoc;
 
     public GameView(GameModel gameModel) {
         this.gameModel = gameModel;
@@ -57,6 +62,8 @@ public class GameView implements GLEventListener {
 
         gl.glEnable(GL2.GL_POLYGON_OFFSET_FILL);
 
+        ShaderChoice.init(gl);
+        glslTimeLoc = gl.glGetUniformLocation(ShaderChoice.NPR.getProgram().getMyID(), "time");
         modelDrawer.init(gl);
     }
 
@@ -94,7 +101,14 @@ public class GameView implements GLEventListener {
             DrawUtil.drawAxes(gl);
             drawSunlightVector(gl);
 
-            modelDrawer.draw(gl, gameModel.isUsingShaders());
+            ShaderChoice shaderChoice = gameModel.getShaderChoice();
+            if (shaderChoice == ShaderChoice.NONE) {
+                gl.glUseProgram(0);
+            } else {
+                Program program = shaderChoice.getProgram();
+                gl.glUseProgram(program.getMyID());
+            }
+            modelDrawer.draw(gl);
         } gl.glPopMatrix();
         gl.glFlush();
     }

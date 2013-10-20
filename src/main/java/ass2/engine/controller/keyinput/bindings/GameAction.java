@@ -65,11 +65,11 @@ public enum GameAction {
         }
     },
 
-    TOGGLE_SHADERS(MyKeyStroke.Z) {
+    CYCLE_SHADERS(MyKeyStroke.Z) {
         @Override
         public void doActionOn(GameModel gameModel, double dt, KeyBinder sourceBinder) {
-            gameModel.toggleUsingShaders();
-            sourceBinder.cancelGameAction(TOGGLE_SHADERS);
+            gameModel.cycleShaders();
+            sourceBinder.cancelGameAction(CYCLE_SHADERS);
         }
     },
 
